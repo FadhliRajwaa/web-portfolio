@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* z scale: grain 100, nav 80, menu 85, modal 90, skip link 110 */
+
+@theme inline {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-paper-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+
+  /* One accent. A reading-room blue, not a brand-neutral blue. */
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-signal-soft: var(--signal-soft);
+
+  /* Instrument surfaces: the viewer, the console, the dark panels. */
+  --color-instrument: var(--instrument);
+  --color-instrument-2: var(--instrument-2);
+  --color-instrument-rule: var(--instrument-rule);
+  --color-instrument-ink: var(--instrument-ink);
+  --color-instrument-mute: var(--instrument-mute);
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: light;
+
+  --paper: #eeebe3;
+  --paper-deep: #e3ded2;
+  --paper-raised: #f7f5ef;
+  --ink: #12161a;
+  --ink-soft: #3a4046;
+  --ink-mute: #565d64;
+  --rule: #cfc8b9;
+  --rule-strong: #b2aa99;
+
+  --signal: #0f4fd1;
+  --signal-ink: #f4f2ec;
+  --signal-soft: #dbe2f7;
+
+  --instrument: #0c1013;
+  --instrument-2: #141a1f;
+  --instrument-rule: #2a3238;
+  --instrument-ink: #e9e6de;
+  --instrument-mute: #8b949b;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0c1013;
+  --paper-deep: #141a1f;
+  --paper-raised: #1a2127;
+  --ink: #e9e6de;
+  --ink-soft: #b8b5ad;
+  --ink-mute: #8b949b;
+  --rule: #262e34;
+  --rule-strong: #3b444b;
+
+  --signal: #6f97ff;
+  --signal-ink: #0a0f17;
+  --signal-soft: #1a2438;
+
+  --instrument: #080b0d;
+  --instrument-2: #11161a;
+  --instrument-rule: #262e34;
+  --instrument-ink: #e9e6de;
+  --instrument-mute: #8b949b;
+}
+
+@layer base {
+  * {
+    border-color: var(--rule);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  * {
+    scrollbar-color: var(--rule-strong) transparent;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--paper-deep);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--rule-strong);
+    border: 3px solid var(--paper-deep);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-mute);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Display voice: Archivo condensed, with word-spacing restored because
+   narrowing the width axis narrows the space glyph too. */
+@utility display {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-stretch: 86%;
+  letter-spacing: -0.038em;
+  word-spacing: 0.06em;
+  line-height: 0.9;
+}
+
+@utility display-tight {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-stretch: 84%;
+  letter-spacing: -0.032em;
+  word-spacing: 0.07em;
+  line-height: 0.94;
+}
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* A measurement readout, used only where a real number is being shown. */
+@utility readout {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="dark"] .grain {
+  opacity: 0.045;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .grain {
+    display: none;
+  }
+}
+
+/* GSAP sets these; without JS the content is already visible. */
+.reveal-line > span {
+  display: block;
+  will-change: transform;
+}

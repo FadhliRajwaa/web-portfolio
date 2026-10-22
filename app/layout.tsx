@@ -18,16 +18,51 @@ const jetbrains = localFont({
   fallback: ["ui-monospace", "monospace"],
 });
 
+const siteUrl = "https://www.fadhliportfolio.my.id";
+
+const description =
+  "Full stack developer: 43 modul parameter perbankan di SAMCO, PACS radiologi dengan viewer DICOM 3D, SIMRS 33 modul, dan produk publik. Backend .NET sampai antarmuka React.";
+
 export const metadata: Metadata = {
-  title: "Fadhli Rajwaa - Full Stack Developer",
-  description:
-    "Full stack developer yang membangun aplikasi web dari backend .NET sampai antarmuka React. Pengalaman di sistem perbankan dan proyek freelance end-to-end.",
-  authors: [{ name: "Fadhli Rajwaa" }],
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Fadhli Rajwaa - Full Stack Developer",
+    template: "%s | Fadhli Rajwaa",
+  },
+  description,
+  authors: [{ name: "Fadhli Rajwaa Rahmana", url: siteUrl }],
+  creator: "Fadhli Rajwaa Rahmana",
+  keywords: [
+    "Fadhli Rajwaa",
+    "full stack developer",
+    "backend developer",
+    ".NET",
+    "C#",
+    "ASP.NET Core",
+    "React",
+    "Next.js",
+    "PACS",
+    "SIMRS",
+    "portfolio",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Fadhli Rajwaa - Full Stack Developer",
-    description:
-      "Backend .NET dan C# di sistem perbankan, lalu aplikasi web end-to-end sebagai solo builder.",
     type: "website",
+    locale: "id_ID",
+    url: siteUrl,
+    siteName: "Fadhli Rajwaa",
+    title: "Fadhli Rajwaa - Full Stack Developer",
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fadhli Rajwaa - Full Stack Developer",
+    description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 

@@ -11,5 +11,3 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .preview
 .vercel
-
-.vercel

@@ -41,7 +41,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       onClick={toggle}
       aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
       aria-pressed={isDark}
-      className={`inline-flex size-10 items-center justify-center border border-rule text-ink-soft transition-colors duration-200 hover:border-ink hover:text-ink active:translate-y-px ${className}`}
+      className={`inline-flex size-11 items-center justify-center border border-rule text-ink-soft transition-colors duration-200 hover:border-ink hover:text-ink active:translate-y-px ${className}`}
     >
       <Sun
         size={16}

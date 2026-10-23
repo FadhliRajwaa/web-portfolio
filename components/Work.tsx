@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowUpRight, Lock, Plus, X } from "@phosphor-icons/react";
+import { ArrowUpRight, Lock, Minus, Plus } from "@phosphor-icons/react";
 import { projects, type Project } from "@/lib/content";
 import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
@@ -12,22 +12,22 @@ function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
   const shot = shots[index];
 
   return (
-    <div>
-      <div className="relative overflow-hidden border border-instrument-rule bg-instrument-2">
+    <div className="min-w-0">
+      <div className="overflow-hidden rounded-xl border border-rule bg-paper-deep">
         <div className="relative aspect-[16/10] w-full">
           <Image
             key={shot.src}
             src={shot.src}
             alt={shot.alt}
             fill
-            sizes="(max-width: 1024px) 100vw, 900px"
+            sizes="(max-width: 1024px) 100vw, 1100px"
             className="object-cover object-top"
           />
         </div>
       </div>
 
-      <div className="mt-3 flex items-start justify-between gap-6">
-        <p className="max-w-[52ch] text-sm leading-relaxed text-instrument-mute">
+      <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
+        <p className="max-w-[52ch] text-sm leading-relaxed text-ink-mute">
           {shot.caption}
         </p>
         {shots.length > 1 ? (
@@ -43,10 +43,10 @@ function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
                 aria-selected={i === index}
                 aria-label={`Tangkapan ${i + 1}: ${s.caption}`}
                 onClick={() => setIndex(i)}
-                className={`h-9 w-14 overflow-hidden border transition-colors ${
+                className={`h-11 w-[4.25rem] overflow-hidden rounded-md border transition-all duration-200 ${
                   i === index
-                    ? "border-[#8fb0ff]"
-                    : "border-instrument-rule opacity-55 hover:opacity-100"
+                    ? "border-signal ring-1 ring-signal"
+                    : "border-rule opacity-55 hover:opacity-100"
                 }`}
               >
                 <Image
@@ -65,218 +65,192 @@ function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
   );
 }
 
-function Detail({
+function ProjectCard({
   project,
-  onClose,
+  open,
+  onToggle,
 }: {
   project: Project;
-  onClose: () => void;
+  open: boolean;
+  onToggle: () => void;
 }) {
-  const panel = useRef<HTMLDivElement>(null);
-  const closeBtn = useRef<HTMLButtonElement>(null);
-
-  useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
-      gsap.from(panel.current, {
-        y: 26,
-        opacity: 0,
-        duration: 0.5,
-        ease: "power3.out",
-      });
-    },
-    { scope: panel },
-  );
-
-  // Focus management is a plain effect concern, not an animation one.
-  useGSAP(() => {
-    const previous = document.activeElement as HTMLElement | null;
-    closeBtn.current?.focus();
-
-    const { overflow, paddingRight } = document.body.style;
-    const gap = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
-    if (gap > 0) document.body.style.paddingRight = `${gap}px`;
-
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-        return;
-      }
-      if (e.key !== "Tab" || !panel.current) return;
-      const items = panel.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      );
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = overflow;
-      document.body.style.paddingRight = paddingRight;
-      previous?.focus();
-    };
-  });
+  const btnId = `proyek-btn-${project.slug}`;
+  const panelId = `proyek-panel-${project.slug}`;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={`detail-${project.slug}`}
-      className="fixed inset-0 z-90 flex items-end justify-center sm:items-center sm:p-6"
-    >
-      <div
-        aria-hidden="true"
-        onClick={onClose}
-        className="absolute inset-0 bg-[#05080a]/80 backdrop-blur-[2px]"
-      />
-
-      <div
-        ref={panel}
-        className="relative max-h-[93dvh] w-full max-w-5xl overflow-y-auto bg-instrument text-instrument-ink sm:max-h-[90dvh]"
+    <article className="project-row overflow-hidden rounded-2xl border border-rule bg-paper-raised transition-colors duration-300 has-[button[aria-expanded='true']]:border-signal/60">
+      {/* Header row: always visible, toggles the detail below. */}
+      <button
+        id={btnId}
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={panelId}
+        className="group grid w-full grid-cols-[1fr_auto] items-center gap-x-5 gap-y-3 px-5 py-5 text-left sm:px-8 sm:py-6 lg:grid-cols-[3.5rem_1fr_auto] lg:gap-x-6"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-instrument-rule bg-instrument px-5 py-3.5 sm:px-8">
-          <div className="flex items-baseline gap-3">
-            <span className="readout text-xs text-[#8fb0ff]">
-              {project.index}
+        <span className="readout hidden text-xs text-ink-mute lg:block">
+          {project.index}
+        </span>
+
+        <span className="min-w-0">
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="display-tight text-2xl text-ink transition-colors duration-300 group-hover:text-signal sm:text-4xl">
+              {project.name}
             </span>
-            <span className="label text-instrument-mute">
+            <span className="readout rounded-full border border-rule bg-paper-deep px-2.5 py-1 text-[10px] tracking-[0.08em] text-ink-soft uppercase">
               {project.category}
             </span>
-          </div>
-          <button
-            ref={closeBtn}
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup detail proyek"
-            className="inline-flex size-9 items-center justify-center border border-instrument-rule text-instrument-ink transition-colors hover:border-instrument-ink"
+            {project.confidential ? (
+              <span className="readout inline-flex items-center gap-1.5 rounded-full border border-rule px-2.5 py-1 text-[10px] text-ink-mute">
+                <Lock size={10} weight="bold" aria-hidden="true" />
+                NDA
+              </span>
+            ) : null}
+          </span>
+          <span className="mt-1.5 block max-w-[64ch] text-sm leading-relaxed text-ink-soft">
+            {project.tagline}
+          </span>
+        </span>
+
+        <span className="flex items-center gap-4 lg:gap-5">
+          <span className="readout hidden text-[11px] text-ink-mute md:inline">
+            {project.period}
+          </span>
+          <span
+            aria-hidden="true"
+            className={`inline-flex size-11 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+              open
+                ? "rotate-180 border-signal bg-signal text-signal-ink"
+                : "border-rule text-ink group-hover:border-signal group-hover:bg-signal group-hover:text-signal-ink"
+            }`}
           >
-            <X size={15} weight="bold" aria-hidden="true" />
-          </button>
-        </div>
+            {open ? (
+              <Minus size={15} weight="bold" />
+            ) : (
+              <Plus size={15} weight="bold" />
+            )}
+          </span>
+        </span>
+      </button>
 
-        <div className="grid gap-8 px-5 py-7 sm:px-8 sm:py-9 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
-          <div>
-            <h3
-              id={`detail-${project.slug}`}
-              className="display text-4xl sm:text-5xl"
-            >
-              {project.name}
-            </h3>
-            <p className="mt-3 max-w-[44ch] text-sm leading-relaxed text-instrument-mute">
-              {project.tagline}
-            </p>
+      {/* Detail: inline expansion, the page grows, nothing is hidden in a modal. */}
+      <div
+        id={panelId}
+        role="region"
+        aria-labelledby={btnId}
+        data-open={open}
+        className="expand-grid"
+      >
+        <div className="expand-inner">
+          <div className="grid gap-8 border-t border-rule px-5 py-7 sm:px-8 sm:py-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+            <div className="min-w-0">
+              <dl className="grid grid-cols-2 gap-x-5 gap-y-4">
+                <div>
+                  <dt className="label text-ink-mute">Peran</dt>
+                  <dd className="mt-1 text-sm text-ink">{project.role}</dd>
+                </div>
+                <div>
+                  <dt className="label text-ink-mute">Periode</dt>
+                  <dd className="readout mt-1 text-sm text-ink">
+                    {project.period}
+                  </dd>
+                </div>
+              </dl>
 
-            <dl className="mt-7 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-instrument-rule pt-5">
-              <div>
-                <dt className="label text-instrument-mute">Peran</dt>
-                <dd className="mt-1 text-sm">{project.role}</dd>
-              </div>
-              <div>
-                <dt className="label text-instrument-mute">Periode</dt>
-                <dd className="readout mt-1 text-sm">{project.period}</dd>
-              </div>
-            </dl>
+              <p className="mt-5 max-w-[56ch] text-sm leading-relaxed text-ink-soft sm:text-[0.95rem]">
+                {project.summary}
+              </p>
 
-            <div className="mt-7">
-              <h4 className="label text-[#8fb0ff]">Masalah</h4>
-              <p className="mt-2.5 max-w-[52ch] text-sm leading-relaxed text-instrument-ink/85">
+              <h4 className="label mt-6 text-signal">Masalah</h4>
+              <p className="mt-2 max-w-[56ch] text-sm leading-relaxed text-ink-soft">
                 {project.problem}
               </p>
-            </div>
 
-            <div className="mt-6">
-              <h4 className="label text-[#8fb0ff]">Yang dibangun</h4>
-              <ul className="mt-2.5 divide-y divide-instrument-rule border-t border-instrument-rule">
+              <h4 className="label mt-6 text-signal">Yang dibangun</h4>
+              <ul className="mt-2 divide-y divide-rule border-t border-rule">
                 {project.built.map((item, i) => (
-                  <li key={item} className="flex gap-3 py-3">
-                    <span className="readout shrink-0 pt-0.5 text-[11px] text-instrument-mute">
+                  <li key={item} className="flex gap-3 py-2.5">
+                    <span className="readout shrink-0 pt-0.5 text-[11px] text-ink-mute">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-sm leading-relaxed">{item}</span>
+                    <span className="text-sm leading-relaxed text-ink">
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
-            </div>
 
-            <div className="mt-6 border-t border-instrument-rule pt-5">
-              <h4 className="label text-[#8fb0ff]">Hasil</h4>
-              <p className="mt-2.5 max-w-[52ch] text-sm leading-relaxed text-instrument-ink/85">
-                {project.outcome}
-              </p>
-            </div>
-
-            <ul className="mt-6 flex flex-wrap gap-1.5">
-              {project.stack.map((tech) => (
-                <li
-                  key={tech}
-                  className="border border-instrument-rule px-2.5 py-1 text-[11px] text-instrument-mute"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
-
-            {project.live ? (
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="group mt-6 inline-flex items-center gap-2 border border-instrument-rule px-4 py-2.5 text-sm text-instrument-ink transition-colors hover:border-[#8fb0ff] hover:text-[#8fb0ff]"
-              >
-                Buka situs
-                <ArrowUpRight
-                  size={14}
-                  weight="bold"
-                  aria-hidden="true"
-                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                />
-              </a>
-            ) : null}
-          </div>
-
-          <div>
-            {project.shots.length ? (
-              <Gallery shots={project.shots} name={project.name} />
-            ) : (
-              <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 border border-instrument-rule bg-instrument-2 px-6 text-center">
-                <Lock size={22} weight="regular" aria-hidden="true" className="text-instrument-mute" />
-                <p className="text-sm text-instrument-mute">
-                  Tampilan tidak dapat ditampilkan karena perjanjian
-                  kerahasiaan dengan klien.
+              <div className="mt-5 rounded-xl bg-signal-soft/60 px-4 py-3.5">
+                <h4 className="label text-signal">Hasil</h4>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink">
+                  {project.outcome}
                 </p>
               </div>
-            )}
+
+              <ul className="mt-5 flex flex-wrap gap-1.5">
+                {project.stack.map((tech) => (
+                  <li
+                    key={tech}
+                    className="rounded-full border border-rule bg-paper px-3 py-1 text-[11px] text-ink-soft transition-colors hover:border-signal hover:text-signal"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+
+              {project.live ? (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="group mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink"
+                >
+                  Buka situs
+                  <ArrowUpRight
+                    size={14}
+                    weight="bold"
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </a>
+              ) : null}
+            </div>
+
+            <div className="min-w-0">
+              {project.shots.length ? (
+                <Gallery shots={project.shots} name={project.name} />
+              ) : (
+                <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-rule-strong bg-paper-deep px-6 text-center">
+                  <Lock
+                    size={22}
+                    weight="regular"
+                    aria-hidden="true"
+                    className="text-ink-mute"
+                  />
+                  <p className="max-w-[38ch] text-sm text-ink-mute">
+                    Tampilan tidak dapat ditampilkan karena perjanjian
+                    kerahasiaan dengan klien.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
 export default function Work() {
-  const [active, setActive] = useState<Project | null>(null);
+  const [openSlug, setOpenSlug] = useState<string | null>(projects[0]?.slug ?? null);
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-
-      // Each row replays when it re-enters the viewport, in either direction.
       gsap.utils.toArray<HTMLElement>(".project-row").forEach((row) => {
         gsap.from(row, {
-          y: 26,
+          y: 28,
           opacity: 0,
           duration: 0.7,
           ease: "power3.out",
@@ -292,8 +266,6 @@ export default function Work() {
     { scope: root },
   );
 
-  // A jump in scroll position (deep link, restored scroll) must not leave
-  // rows invisible; the trigger is refreshed once fonts and images settle.
   useGSAP(() => {
     const id = window.setTimeout(() => ScrollTrigger.refresh(), 600);
     return () => window.clearTimeout(id);
@@ -304,75 +276,39 @@ export default function Work() {
       ref={root}
       id="kerja"
       aria-labelledby="kerja-judul"
-      className="mx-auto max-w-[1480px] px-5 pt-24 pb-24 sm:px-8 sm:pt-32"
+      className="mx-auto max-w-[1480px] px-5 pt-20 pb-24 sm:px-8 sm:pt-28"
     >
-      <div className="flex flex-wrap items-end justify-between gap-5 border-b border-rule pb-5">
-        <h2
-          id="kerja-judul"
-          className="display text-[clamp(2.5rem,6vw,4.75rem)]"
-        >
-          Proyek
-        </h2>
-        <p className="readout text-xs text-ink-mute">
-          {String(projects.length).padStart(2, "0")} sistem, 2025-2026
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div className="min-w-0">
+          <p className="label flex items-center gap-3 text-signal">
+            <span aria-hidden="true" className="h-px w-7 bg-signal/60" />
+            01 — Proyek
+          </p>
+          <h2
+            id="kerja-judul"
+            className="display mt-4 text-[clamp(2.6rem,7vw,5.5rem)]"
+          >
+            Indeks kerja
+          </h2>
+        </div>
+        <p className="readout max-w-[26ch] text-left text-[11px] leading-relaxed text-ink-mute sm:text-right">
+          {String(projects.length).padStart(2, "0")} sistem · 2025—2026 · klik
+          untuk membuka berkas
         </p>
       </div>
 
-      <ul>
+      <div className="mt-10 flex flex-col gap-4">
         {projects.map((project) => (
-          <li key={project.slug} className="border-b border-rule">
-            <button
-              type="button"
-              onClick={() => setActive(project)}
-              aria-haspopup="dialog"
-              className="project-row group relative grid w-full grid-cols-[1fr_auto] items-start gap-x-5 gap-y-3 py-7 text-left sm:grid-cols-[3rem_1fr_auto] sm:items-baseline sm:py-8"
-            >
-              <span
-                aria-hidden="true"
-                className="absolute inset-y-0 -left-3 -right-3 -z-10 origin-bottom scale-y-0 bg-paper-raised transition-transform duration-300 ease-[var(--ease-expo)] group-hover:scale-y-100 group-focus-visible:scale-y-100"
-              />
-
-              <span className="readout hidden text-xs text-ink-mute sm:block">
-                {project.index}
-              </span>
-
-              <span className="min-w-0">
-                <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="display-tight text-[1.75rem] transition-colors duration-300 group-hover:text-signal sm:text-4xl">
-                    {project.name}
-                  </span>
-                  <span className="label text-ink-mute">
-                    {project.category}
-                  </span>
-                  {project.confidential ? (
-                    <span className="label inline-flex items-center gap-1.5 border border-rule px-2 py-1 text-ink-mute">
-                      <Lock size={10} weight="bold" aria-hidden="true" />
-                      NDA
-                    </span>
-                  ) : null}
-                </span>
-                <span className="mt-2 block max-w-[64ch] text-sm leading-relaxed text-ink-soft">
-                  {project.tagline}
-                </span>
-                <span className="readout mt-2.5 block text-[11px] text-ink-mute sm:hidden">
-                  {project.period}
-                </span>
-              </span>
-
-              <span className="flex items-center gap-5 sm:justify-end">
-                <span className="readout hidden text-[11px] text-ink-mute sm:inline">
-                  {project.period}
-                </span>
-                <span className="inline-flex size-10 shrink-0 items-center justify-center border border-rule text-ink transition-colors duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-signal-ink">
-                  <Plus size={15} weight="bold" aria-hidden="true" />
-                </span>
-              </span>
-            </button>
-          </li>
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            open={openSlug === project.slug}
+            onToggle={() =>
+              setOpenSlug((s) => (s === project.slug ? null : project.slug))
+            }
+          />
         ))}
-      </ul>
-
-      {active ? <Detail project={active} onClose={() => setActive(null)} /> : null}
+      </div>
     </section>
   );
 }

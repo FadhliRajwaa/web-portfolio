@@ -1,11 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpRight, Check, Copy } from "@phosphor-icons/react";
+import { useRef, useState } from "react";
+import {
+  ArrowUp,
+  ArrowUpRight,
+  Check,
+  Copy,
+} from "@phosphor-icons/react";
 import { profile } from "@/lib/content";
+import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      gsap.from(".contact-word > span", {
+        yPercent: 110,
+        duration: 0.9,
+        stagger: 0.07,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top 78%",
+          once: true,
+        },
+      });
+    },
+    { scope: root },
+  );
 
   async function copyEmail() {
     try {
@@ -18,35 +43,44 @@ export default function Contact() {
   }
 
   return (
-    <section
+    <footer
+      ref={root}
       id="kontak"
       aria-labelledby="kontak-judul"
       className="bg-instrument text-instrument-ink"
     >
-      <div className="mx-auto max-w-[1480px] px-5 py-24 sm:px-8 sm:py-32">
-        <div className="max-w-4xl">
-          <h2
-            id="kontak-judul"
-            className="display text-[clamp(2.7rem,8vw,6rem)]"
-          >
-            Butuh sistem
-            <br />
-            yang bisa dirawat?
-          </h2>
+      <div className="mx-auto max-w-[1480px] px-5 pt-20 pb-10 sm:px-8 sm:pt-28">
+        <p className="label flex items-center gap-3 text-instrument-mute">
+          <span aria-hidden="true" className="h-px w-7 bg-instrument-rule" />
+          04 — Kontak
+        </p>
 
-          <p className="mt-7 max-w-[48ch] text-base leading-relaxed text-instrument-mute sm:text-lg">
+        <h2
+          id="kontak-judul"
+          className="display mt-5 text-[clamp(2.8rem,9vw,7.5rem)] uppercase"
+          aria-label="Butuh sistem yang bisa dirawat?"
+        >
+          <span className="contact-word block overflow-hidden pb-[0.08em]">
+            <span className="block">Butuh sistem</span>
+          </span>
+          <span className="contact-word block overflow-hidden pb-[0.1em]">
+            <span className="block">
+              yang <span className="text-[#8fb0ff]">bisa dirawat?</span>
+            </span>
+          </span>
+        </h2>
+
+        <div className="mt-8 grid gap-x-12 gap-y-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <p className="max-w-[52ch] text-base leading-relaxed text-instrument-mute sm:text-lg">
             Saya menerima pekerjaan untuk aplikasi web, sistem internal, dan
-            pekerjaan backend. Ceritakan kebutuhannya lewat surel, saya balas
+            pekerjaan backend. Ceritakan kebutuhannya lewat surel — saya balas
             dengan pertanyaan yang perlu dijawab sebelum estimasi.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            {/* This panel is always dark, so the button must not follow the
-                page theme: bg-paper turns near-black in dark mode and kills
-                the contrast. It keeps a fixed light fill instead. */}
+          <div className="flex flex-wrap items-center gap-3">
             <a
               href={`mailto:${profile.email}`}
-              className="group inline-flex h-12 items-center gap-2 bg-[#eeebe3] px-6 text-sm font-medium text-[#12161a] transition-colors duration-200 hover:bg-[#8fb0ff] hover:text-[#05080a] active:translate-y-px"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#eceae3] px-7 text-sm font-medium text-[#101319] transition-colors duration-200 hover:bg-[#8fb0ff] hover:text-[#05080a] active:translate-y-px"
             >
               Kirim surel
               <ArrowUpRight
@@ -60,7 +94,7 @@ export default function Contact() {
             <button
               type="button"
               onClick={copyEmail}
-              className="inline-flex h-12 items-center gap-2 border border-instrument-rule px-5 text-sm text-instrument-ink transition-colors duration-200 hover:border-instrument-ink active:translate-y-px"
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-instrument-rule px-6 text-sm text-instrument-ink transition-colors duration-200 hover:border-instrument-ink active:translate-y-px"
             >
               {copied ? (
                 <Check size={15} weight="bold" aria-hidden="true" />
@@ -74,7 +108,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <dl className="mt-16 grid gap-x-8 gap-y-6 border-t border-instrument-rule pt-7 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="mt-14 grid gap-x-8 gap-y-6 border-t border-instrument-rule pt-7 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <dt className="label text-instrument-mute">Surel</dt>
             <dd className="mt-1.5 text-sm break-all">{profile.email}</dd>
@@ -90,10 +124,15 @@ export default function Contact() {
                 href={profile.github}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-[#8fb0ff]"
+                className="group inline-flex items-center gap-1.5 transition-colors hover:text-[#8fb0ff]"
               >
                 FadhliRajwaa
-                <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
+                <ArrowUpRight
+                  size={12}
+                  weight="bold"
+                  aria-hidden="true"
+                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
               </a>
             </dd>
           </div>
@@ -104,15 +143,41 @@ export default function Contact() {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-[#8fb0ff]"
+                className="group inline-flex items-center gap-1.5 transition-colors hover:text-[#8fb0ff]"
               >
                 fadhli-rajwaa-rahmana
-                <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
+                <ArrowUpRight
+                  size={12}
+                  weight="bold"
+                  aria-hidden="true"
+                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
               </a>
             </dd>
           </div>
         </dl>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-instrument-rule pt-6">
+          <p className="readout text-[11px] text-instrument-mute">
+            © 2026 {profile.name}
+          </p>
+          <p className="readout hidden text-[11px] text-instrument-mute sm:inline">
+            SMG — ID · .NET / React
+          </p>
+          <a
+            href="#atas"
+            className="group inline-flex min-h-[44px] items-center gap-2 rounded-full border border-instrument-rule px-5 py-2.5 text-xs text-instrument-ink transition-colors hover:border-instrument-ink"
+          >
+            Kembali ke atas
+            <ArrowUp
+              size={13}
+              weight="bold"
+              aria-hidden="true"
+              className="transition-transform duration-300 group-hover:-translate-y-0.5"
+            />
+          </a>
+        </div>
       </div>
-    </section>
+    </footer>
   );
 }

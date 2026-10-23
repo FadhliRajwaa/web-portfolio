@@ -2,7 +2,9 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* z scale: grain 100, nav 80, menu 85, modal 90, skip link 110 */
+/* Hallmark · macrostructure: Workbench-Index · theme: Cobalt-Dossier (custom)
+ * audience = perekrut & klien · use = bukti kerja & kontak · tone = editorial-technical
+ * z scale: grain 100, nav 80, menu 85, progress 82, skip link 110 */
 
 @theme inline {
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
@@ -17,12 +19,12 @@
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
 
-  /* One accent. A reading-room blue, not a brand-neutral blue. */
+  /* One accent: cobalt. Engineering blue, never gradient. */
   --color-signal: var(--signal);
   --color-signal-ink: var(--signal-ink);
   --color-signal-soft: var(--signal-soft);
 
-  /* Instrument surfaces: the viewer, the console, the dark panels. */
+  /* Instrument surfaces: the console, the viewer, the closing footer. */
   --color-instrument: var(--instrument);
   --color-instrument-2: var(--instrument-2);
   --color-instrument-rule: var(--instrument-rule);
@@ -35,47 +37,47 @@
 :root {
   color-scheme: light;
 
-  --paper: #eeebe3;
-  --paper-deep: #e3ded2;
-  --paper-raised: #f7f5ef;
-  --ink: #12161a;
-  --ink-soft: #3a4046;
-  --ink-mute: #565d64;
-  --rule: #cfc8b9;
-  --rule-strong: #b2aa99;
+  --paper: #fbfbfa;
+  --paper-deep: #f1f1ee;
+  --paper-raised: #ffffff;
+  --ink: #101319;
+  --ink-soft: #3d434d;
+  --ink-mute: #68707c;
+  --rule: #e2e3e7;
+  --rule-strong: #c6c9d1;
 
-  --signal: #0f4fd1;
-  --signal-ink: #f4f2ec;
-  --signal-soft: #dbe2f7;
+  --signal: #2447f5;
+  --signal-ink: #ffffff;
+  --signal-soft: #d9e1ff;
 
-  --instrument: #0c1013;
-  --instrument-2: #141a1f;
-  --instrument-rule: #2a3238;
-  --instrument-ink: #e9e6de;
-  --instrument-mute: #8b949b;
+  --instrument: #0b0d12;
+  --instrument-2: #12151c;
+  --instrument-rule: #262b36;
+  --instrument-ink: #eceae3;
+  --instrument-mute: #8f96a3;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --paper: #0c1013;
-  --paper-deep: #141a1f;
-  --paper-raised: #1a2127;
-  --ink: #e9e6de;
-  --ink-soft: #b8b5ad;
-  --ink-mute: #8b949b;
-  --rule: #262e34;
-  --rule-strong: #3b444b;
+  --paper: #0a0b0e;
+  --paper-deep: #101216;
+  --paper-raised: #161920;
+  --ink: #f2f0ea;
+  --ink-soft: #b9b6ad;
+  --ink-mute: #8e94a0;
+  --rule: #22262e;
+  --rule-strong: #3a404c;
 
-  --signal: #6f97ff;
-  --signal-ink: #0a0f17;
-  --signal-soft: #1a2438;
+  --signal: #8aa5ff;
+  --signal-ink: #0a0f22;
+  --signal-soft: #1a2342;
 
-  --instrument: #080b0d;
-  --instrument-2: #11161a;
-  --instrument-rule: #262e34;
-  --instrument-ink: #e9e6de;
-  --instrument-mute: #8b949b;
+  --instrument: #060709;
+  --instrument-2: #0e1015;
+  --instrument-rule: #22262e;
+  --instrument-ink: #eceae3;
+  --instrument-mute: #8f96a3;
 }
 
 @layer base {
@@ -88,8 +90,13 @@
     scroll-behavior: smooth;
   }
 
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   [id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 6rem;
   }
 
   body {
@@ -99,7 +106,6 @@
     font-synthesis-weight: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: clip;
   }
 
   ::selection {
@@ -156,24 +162,23 @@
   }
 }
 
-/* Display voice: Archivo condensed, with word-spacing restored because
-   narrowing the width axis narrows the space glyph too. */
+/* Display voice: Archivo, tight and condensed. */
 @utility display {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-stretch: 86%;
-  letter-spacing: -0.038em;
-  word-spacing: 0.06em;
-  line-height: 0.9;
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: -0.04em;
+  word-spacing: 0.05em;
+  line-height: 0.92;
 }
 
 @utility display-tight {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-stretch: 84%;
-  letter-spacing: -0.032em;
-  word-spacing: 0.07em;
-  line-height: 0.94;
+  font-weight: 650;
+  font-stretch: 86%;
+  letter-spacing: -0.03em;
+  word-spacing: 0.06em;
+  line-height: 0.96;
 }
 
 @utility label {
@@ -181,7 +186,7 @@
   font-size: 0.6875rem;
   line-height: 1.2;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
@@ -199,20 +204,140 @@
   letter-spacing: 0.02em;
 }
 
+/* Outlined ghost words behind sections. Roman, never italic. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px
+    color-mix(in srgb, var(--ink) 60%, transparent);
+}
+
+:root[data-theme="dark"] .text-outline {
+  -webkit-text-stroke-color: color-mix(
+    in srgb,
+    var(--ink) 82%,
+    transparent
+  );
+}
+
+@supports not (-webkit-text-stroke: 1px black) {
+  .text-outline {
+    color: var(--ink);
+  }
+}
+
+/* Blueprint dot field for the hero. */
+.bg-dots {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--ink) 13%, transparent) 1px,
+    transparent 1.4px
+  );
+  background-size: 22px 22px;
+}
+
+:root[data-theme="dark"] .bg-dots {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--ink) 16%, transparent) 1px,
+    transparent 1.4px
+  );
+  background-size: 22px 22px;
+}
+
+/* Marquee ticker. The track holds the list twice; translating -50% loops it. */
+@keyframes ticker-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: ticker-scroll 36s linear infinite;
+}
+
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+/* Inline expansion for project rows: grid-rows transition, no height animation. */
+.expand-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--ease-expo);
+}
+
+.expand-grid[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.expand-inner {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.4s ease 0.08s,
+    transform 0.55s var(--ease-expo) 0.05s;
+}
+
+.expand-grid[data-open="true"] .expand-inner {
+  opacity: 1;
+  transform: none;
+}
+
+/* Spotlight cards: a cursor-following wash in the one accent colour. */
+.spot-card {
+  position: relative;
+}
+
+.spot-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--signal) 10%, transparent),
+    transparent 70%
+  );
+}
+
+.spot-card:hover::before {
+  opacity: 1;
+}
+
 .grain {
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.028;
+  opacity: 0.032;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="dark"] .grain {
-  opacity: 0.045;
+  opacity: 0.05;
 }
 
-@media (prefers-reduced-transparency: reduce) {
+@media (prefers-transparency: reduce) {
   .grain {
     display: none;
   }
@@ -222,4 +347,20 @@
 .reveal-line > span {
   display: block;
   will-change: transform;
+}
+
+/* CV print: paper output, no app chrome. */
+@media print {
+  header,
+  nav,
+  .grain {
+    display: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
 }

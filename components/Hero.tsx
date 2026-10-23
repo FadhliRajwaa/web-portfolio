@@ -15,6 +15,8 @@ export default function Hero() {
 
       // One authored moment on load: the name resolves, the dossier settles,
       // the figures count up. Nothing else animates on load.
+      // A safety timeout below re-pins the final state: if fonts or images
+      // shift the layout mid-timeline, no line may be left half-hidden.
       const tl = gsap.timeline({ defaults: { ease: EASE } });
       tl.from(".hero-line > span", {
         yPercent: 112,
@@ -25,6 +27,10 @@ export default function Hero() {
         { y: 20, opacity: 0, duration: 0.8, stagger: 0.08 },
         "-=0.7",
       );
+      const safety = window.setTimeout(() => {
+        tl.progress(1);
+        gsap.set([".hero-line > span", ".hero-fade"], { clearProps: "all" });
+      }, 4000);
 
       gsap.utils.toArray<HTMLElement>(".hero-stat-value").forEach((el) => {
         const target = Number(el.dataset.count ?? "0");
@@ -41,6 +47,8 @@ export default function Hero() {
           },
         });
       });
+
+      return () => window.clearTimeout(safety);
     },
     { scope: root },
   );

@@ -349,6 +349,27 @@
   will-change: transform;
 }
 
+/* Safety net: no scroll-revealed element may stay invisible. GSAP `from()`
+   tweens start hidden and only become visible when their ScrollTrigger
+   fires; if a trigger misfires (deep link, font shift, fast anchor jump)
+   the content would strand at opacity 0. `once: true` triggers can only
+   move toward visible, and this backstop pins anything left behind once
+   the page settles. The contact reveal runs on `once` already, so it is
+   unaffected. */
+@media (prefers-reduced-motion: no-preference) {
+  .project-row,
+  .cap-card {
+    animation: reveal-backstop 0.01s linear 5s forwards;
+  }
+}
+
+@keyframes reveal-backstop {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* CV print: paper output, no app chrome. */
 @media print {
   header,

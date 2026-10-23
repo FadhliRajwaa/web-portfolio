@@ -257,8 +257,7 @@ export default function Work() {
           scrollTrigger: {
             trigger: row,
             start: "top 92%",
-            end: "bottom 8%",
-            toggleActions: "play reverse play reverse",
+            once: true,
           },
         });
       });
@@ -266,9 +265,21 @@ export default function Work() {
     { scope: root },
   );
 
+  // Positions shift as fonts and screenshots settle; re-measure so a
+  // trigger never fires against a stale layout and strands a row at
+  // opacity 0 (the blank-section bug). `once: true` above guarantees a
+  // row can only move toward visible, never back to hidden.
   useGSAP(() => {
-    const id = window.setTimeout(() => ScrollTrigger.refresh(), 600);
-    return () => window.clearTimeout(id);
+    const refresh = () => ScrollTrigger.refresh();
+    const id = window.setTimeout(refresh, 600);
+    window.addEventListener("load", refresh);
+    if (document.fonts) {
+      document.fonts.ready.then(refresh).catch(() => {});
+    }
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener("load", refresh);
+    };
   });
 
   return (

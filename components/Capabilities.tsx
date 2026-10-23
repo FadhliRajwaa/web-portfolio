@@ -90,7 +90,7 @@ export default function Capabilities() {
           return (
             <article
               key={cap.title}
-              className="cap-card spot-card min-w-0 rounded-2xl border border-rule bg-paper-raised p-6 transition-colors duration-300 hover:border-signal/50 sm:p-8"
+              className="cap-card spot-card min-w-0 rounded-2xl border border-rule bg-paper-raised p-5 pb-6 transition-colors duration-300 hover:border-signal/50 sm:p-8"
             >
               <div className="flex items-center justify-between gap-4">
                 <span

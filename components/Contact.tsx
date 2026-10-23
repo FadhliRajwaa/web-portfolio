@@ -77,10 +77,10 @@ export default function Contact() {
             dengan pertanyaan yang perlu dijawab sebelum estimasi.
           </p>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
             <a
               href={`mailto:${profile.email}`}
-              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#eceae3] px-7 text-sm font-medium text-[#101319] transition-colors duration-200 hover:bg-[#8fb0ff] hover:text-[#05080a] active:translate-y-px"
+              className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#eceae3] px-7 text-sm font-medium text-[#101319] transition-colors duration-200 hover:bg-[#8fb0ff] hover:text-[#05080a] active:translate-y-px"
             >
               Kirim surel
               <ArrowUpRight
@@ -94,7 +94,7 @@ export default function Contact() {
             <button
               type="button"
               onClick={copyEmail}
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-instrument-rule px-6 text-sm text-instrument-ink transition-colors duration-200 hover:border-instrument-ink active:translate-y-px"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-instrument-rule px-6 text-sm text-instrument-ink transition-colors duration-200 hover:border-instrument-ink active:translate-y-px"
             >
               {copied ? (
                 <Check size={15} weight="bold" aria-hidden="true" />
@@ -109,9 +109,9 @@ export default function Contact() {
         </div>
 
         <dl className="mt-14 grid gap-x-8 gap-y-6 border-t border-instrument-rule pt-7 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
+          <div className="min-w-0 sm:col-span-2 lg:col-span-1">
             <dt className="label text-instrument-mute">Surel</dt>
-            <dd className="mt-1.5 text-sm break-all">{profile.email}</dd>
+            <dd className="mt-1.5 text-sm break-words">{profile.email}</dd>
           </div>
           <div>
             <dt className="label text-instrument-mute">Telepon</dt>

@@ -86,7 +86,7 @@ function ProjectCard({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="group grid w-full grid-cols-[1fr_auto] items-center gap-x-5 gap-y-3 px-5 py-5 text-left sm:px-8 sm:py-6 lg:grid-cols-[3.5rem_1fr_auto] lg:gap-x-6"
+        className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-3 px-5 py-5 text-left sm:px-8 sm:py-6 lg:grid-cols-[3.5rem_1fr_auto] lg:gap-x-6"
       >
         <span className="readout hidden text-xs text-ink-mute lg:block">
           {project.index}
@@ -112,13 +112,13 @@ function ProjectCard({
           </span>
         </span>
 
-        <span className="flex items-center gap-4 lg:gap-5">
+        <span className="flex items-center gap-3 pt-1 lg:gap-5 lg:pt-0">
           <span className="readout hidden text-[11px] text-ink-mute md:inline">
             {project.period}
           </span>
           <span
             aria-hidden="true"
-            className={`inline-flex size-11 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+            className={`inline-flex size-11 shrink-0 items-center justify-center self-start rounded-full border transition-all duration-300 ${
               open
                 ? "rotate-180 border-signal bg-signal text-signal-ink"
                 : "border-rule text-ink group-hover:border-signal group-hover:bg-signal group-hover:text-signal-ink"
@@ -142,9 +142,9 @@ function ProjectCard({
         className="expand-grid"
       >
         <div className="expand-inner">
-          <div className="grid gap-8 border-t border-rule px-5 py-7 sm:px-8 sm:py-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+          <div className="grid min-w-0 gap-8 border-t border-rule px-5 py-7 sm:px-8 sm:py-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
             <div className="min-w-0">
-              <dl className="grid grid-cols-2 gap-x-5 gap-y-4">
+              <dl className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-4 min-[420px]:grid-cols-2">
                 <div>
                   <dt className="label text-ink-mute">Peran</dt>
                   <dd className="mt-1 text-sm text-ink">{project.role}</dd>

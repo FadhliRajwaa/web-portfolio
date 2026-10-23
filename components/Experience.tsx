@@ -108,10 +108,10 @@ function FlowCard({ flow, index }: { flow: Flow; index: number }) {
           {flow.period}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-base font-semibold tracking-tight text-ink sm:text-lg">
+          <span className="block text-base font-semibold tracking-tight text-ink sm:text-lg">
             {flow.role}
           </span>
-          <span className="mt-0.5 block truncate text-[13px] text-ink-soft">
+          <span className="mt-0.5 block text-[13px] leading-snug text-ink-soft">
             {flow.company} · {flow.location}
           </span>
           <span className="readout mt-1 block text-[11px] text-ink-mute sm:hidden">
@@ -206,12 +206,12 @@ export default function Experience() {
         {/* Portrait panel with spotlight + CV. */}
         <div
           ref={heroRef}
-          className="spot-card relative flex min-h-[26rem] flex-col justify-end overflow-hidden rounded-2xl border border-rule bg-paper-deep"
+          className="spot-card relative flex min-h-[20rem] flex-col justify-end overflow-hidden rounded-2xl border border-rule bg-paper-deep sm:min-h-[24rem] lg:min-h-[26rem]"
           style={{ ["--mx" as string]: `${spot.x}%`, ["--my" as string]: `${spot.y}%` }}
         >
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-[50%_18%]"
+            className="absolute inset-0 bg-cover bg-[50%_12%]"
             style={{ backgroundImage: "url(/images/fadhli.jpg)" }}
           />
           <div
@@ -219,14 +219,14 @@ export default function Experience() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to top, color-mix(in srgb, var(--ink) 78%, transparent) 0%, color-mix(in srgb, var(--ink) 30%, transparent) 45%, transparent 70%)",
+                "linear-gradient(to top, color-mix(in srgb, var(--ink) 88%, transparent) 0%, color-mix(in srgb, var(--ink) 55%, transparent) 45%, transparent 82%)",
             }}
           />
-          <div className="relative p-6 sm:p-8">
-            <p className="readout text-[11px] text-white/70">
+          <div className="relative p-5 sm:p-8">
+            <p className="readout text-[11px] text-white/80">
               {profile.name}
             </p>
-            <p className="display-tight mt-1 max-w-[16ch] text-3xl text-white sm:text-4xl">
+            <p className="display-tight mt-1 max-w-[16ch] text-[1.65rem] leading-[1.05] text-white sm:text-4xl">
               Sistem yang bisa dipercaya saat datanya salah.
             </p>
             <div className="mt-5 flex flex-wrap gap-2.5">
@@ -251,7 +251,7 @@ export default function Experience() {
                 LinkedIn
               </a>
             </div>
-            <dl className="mt-6 grid grid-cols-3 gap-3 border-t border-white/25 pt-4">
+            <dl className="mt-6 grid grid-cols-1 gap-x-3 gap-y-3 border-t border-white/25 pt-4 min-[420px]:grid-cols-3">
               {meta.map((m) => (
                 <div key={m.label}>
                   <dt className="readout text-[10px] tracking-[0.1em] text-white/60 uppercase">
@@ -284,7 +284,7 @@ export default function Experience() {
                   className="flex items-baseline justify-between gap-4 border-b border-rule/70 py-2.5 last:border-b-0"
                 >
                   <span className="min-w-0">
-                    <span className="block truncate text-sm text-ink">
+                    <span className="block text-sm leading-snug text-ink">
                       {cert.name}
                     </span>
                     <span className="mt-0.5 block text-xs text-ink-mute">

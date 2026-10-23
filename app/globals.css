@@ -96,7 +96,7 @@
   }
 
   [id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 7.5rem;
   }
 
   body {
@@ -228,18 +228,18 @@
 /* Blueprint dot field for the hero. */
 .bg-dots {
   background-image: radial-gradient(
-    color-mix(in srgb, var(--ink) 13%, transparent) 1px,
-    transparent 1.4px
+    color-mix(in srgb, var(--ink) 8%, transparent) 1px,
+    transparent 1.5px
   );
-  background-size: 22px 22px;
+  background-size: 24px 24px;
 }
 
 :root[data-theme="dark"] .bg-dots {
   background-image: radial-gradient(
-    color-mix(in srgb, var(--ink) 16%, transparent) 1px,
-    transparent 1.4px
+    color-mix(in srgb, var(--ink) 10%, transparent) 1px,
+    transparent 1.5px
   );
-  background-size: 22px 22px;
+  background-size: 24px 24px;
 }
 
 /* Marquee ticker. The track holds the list twice; translating -50% loops it. */
@@ -261,15 +261,15 @@
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
-    black 8%,
-    black 92%,
+    black 10%,
+    black 90%,
     transparent
   );
   mask-image: linear-gradient(
     to right,
     transparent,
-    black 8%,
-    black 92%,
+    black 10%,
+    black 90%,
     transparent
   );
 }

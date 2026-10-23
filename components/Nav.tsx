@@ -167,7 +167,7 @@ export default function Nav() {
           id="menu-seluler"
           className="fixed inset-0 z-85 flex flex-col bg-paper lg:hidden"
         >
-          <div className="flex items-center justify-between px-5 pt-4">
+          <div className="flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-2">
             <span className="label text-ink-mute">Menu</span>
             <button
               type="button"
@@ -179,14 +179,14 @@ export default function Nav() {
             </button>
           </div>
 
-          <nav aria-label="Navigasi seluler" className="flex-1 px-5 pt-6">
-            <ul>
+          <nav aria-label="Navigasi seluler" className="flex flex-1 flex-col justify-center px-5 pb-10">
+            <ul className="border-t border-rule">
               {links.map((link) => (
                 <li key={link.href} className="border-b border-rule">
                   <a
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="group flex items-center justify-between py-5"
+                    className="group flex min-h-[76px] items-center justify-between py-4"
                   >
                     <span className="flex items-baseline gap-3">
                       <span className="readout text-xs text-signal">
@@ -210,7 +210,7 @@ export default function Nav() {
             <a
               href={`mailto:${profile.email}`}
               onClick={() => setOpen(false)}
-              className="mt-7 flex h-13 w-full items-center justify-center rounded-full bg-ink text-sm font-medium text-paper"
+              className="mt-8 flex h-13 w-full items-center justify-center rounded-full bg-ink text-sm font-medium text-paper"
             >
               {profile.email}
             </a>

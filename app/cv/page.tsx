@@ -50,7 +50,7 @@ export default function CvPage() {
       </a>
 
       <div className="print:hidden">
-        <header className="fixed inset-x-0 top-0 z-80 px-4 pt-4 sm:px-6">
+        <header className="fixed inset-x-0 top-0 z-80 px-4 pt-[max(1rem,env(safe-area-inset-top))] sm:px-6">
           <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 rounded-full border border-rule bg-paper/85 py-2 pr-2 pl-5 shadow-[0_8px_30px_-12px_rgba(16,19,25,0.25)] backdrop-blur-md">
             <BackHome />
             <div className="flex items-center gap-2">
@@ -66,35 +66,35 @@ export default function CvPage() {
         <div className="flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6">
           <div>
             <p className="label text-signal">Curriculum vitae</p>
-            <h1 className="display mt-2 text-[clamp(2.4rem,7vw,4.5rem)] text-ink">
+            <h1 className="display mt-2 text-[clamp(2rem,11vw,4.5rem)] leading-[0.95] text-ink">
               {profile.name}
             </h1>
-            <p className="mt-2 text-base text-ink-soft">{profile.role}</p>
-            <p className="mt-1 max-w-[58ch] text-sm leading-relaxed text-ink-soft">
+            <p className="mt-3 text-base font-medium text-ink">{profile.role}</p>
+            <p className="mt-2 max-w-[58ch] text-sm leading-relaxed text-ink-soft">
               {profile.bio}
             </p>
           </div>
-          <dl className="readout space-y-1.5 text-xs text-ink-soft">
-            <div className="flex gap-2">
-              <dt className="w-16 shrink-0 text-ink-mute">Surel</dt>
-              <dd className="break-all">{profile.email}</dd>
+          <dl className="readout w-full space-y-0 text-xs text-ink-soft sm:w-auto sm:space-y-1.5">
+            <div className="flex flex-col gap-0.5 border-t border-rule py-2 sm:flex-row sm:gap-2 sm:border-t-0 sm:py-0">
+              <dt className="shrink-0 text-ink-mute sm:w-16">Surel</dt>
+              <dd className="break-words">{profile.email}</dd>
             </div>
-            <div className="flex gap-2">
-              <dt className="w-16 shrink-0 text-ink-mute">Telepon</dt>
+            <div className="flex flex-col gap-0.5 border-t border-rule py-2 sm:flex-row sm:gap-2 sm:border-t-0 sm:py-0">
+              <dt className="shrink-0 text-ink-mute sm:w-16">Telepon</dt>
               <dd>{profile.phone}</dd>
             </div>
-            <div className="flex gap-2">
-              <dt className="w-16 shrink-0 text-ink-mute">Lokasi</dt>
+            <div className="flex flex-col gap-0.5 border-t border-rule py-2 sm:flex-row sm:gap-2 sm:border-t-0 sm:py-0">
+              <dt className="shrink-0 text-ink-mute sm:w-16">Lokasi</dt>
               <dd>{profile.location}</dd>
             </div>
-            <div className="flex gap-2 print:hidden">
-              <dt className="w-16 shrink-0 text-ink-mute">Web</dt>
+            <div className="flex flex-col gap-0.5 border-t border-rule py-2 sm:flex-row sm:gap-2 sm:border-t-0 sm:py-0 print:hidden">
+              <dt className="shrink-0 text-ink-mute sm:w-16">Web</dt>
               <dd>
                 <WebLink />
               </dd>
             </div>
-            <div className="flex gap-2">
-              <dt className="w-16 shrink-0 text-ink-mute">Didik</dt>
+            <div className="flex flex-col gap-0.5 border-y border-rule py-2 sm:flex-row sm:gap-2 sm:border-y-0 sm:py-0">
+              <dt className="shrink-0 text-ink-mute sm:w-16">Didik</dt>
               <dd>{profile.education}</dd>
             </div>
           </dl>
@@ -105,7 +105,10 @@ export default function CvPage() {
             {experience.map((job) => (
               <li key={job.company} className="break-inside-avoid">
                 <h3 className="text-base font-semibold text-ink">
-                  {job.role} — {job.company}
+                  <span className="block sm:inline">{job.role}</span>{" "}
+                  <span className="mt-0.5 block text-[13px] font-normal text-ink-mute sm:mt-0 sm:inline">
+                    — {job.company}
+                  </span>
                 </h3>
                 <p className="readout mt-1 text-xs text-signal">
                   {job.period} · {job.location}

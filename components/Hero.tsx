@@ -58,7 +58,7 @@ export default function Hero() {
       ref={root}
       id="atas"
       aria-labelledby="hero-judul"
-      className="relative overflow-hidden pt-32 sm:pt-40"
+      className="relative scroll-mt-24 overflow-hidden pt-28 sm:pt-40"
     >
       {/* Blueprint field, fading out before the stats band. */}
       <div
@@ -89,7 +89,7 @@ export default function Hero() {
           <span className="hero-line block overflow-hidden pb-[0.08em]">
             <span>Fadhli</span>
           </span>
-          <span className="hero-line -mt-[0.06em] block overflow-hidden pb-[0.1em]">
+          <span className="hero-line -mt-[0.03em] block overflow-hidden pt-[0.03em] pb-[0.1em]">
             <span className="text-outline">Rajwaa</span>
           </span>
         </h1>
@@ -103,10 +103,10 @@ export default function Hero() {
               orang setiap hari.
             </p>
 
-            <div className="hero-fade mt-8 flex flex-wrap items-center gap-3">
+            <div className="hero-fade mt-8 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
               <a
                 href="#kerja"
-                className="group inline-flex h-12 items-center gap-2 rounded-full bg-ink px-7 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink active:translate-y-px"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink active:translate-y-px"
               >
                 Lihat proyek
                 <ArrowDownRight
@@ -120,7 +120,7 @@ export default function Hero() {
                 href={profile.github}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="group inline-flex h-12 items-center gap-2 rounded-full border border-rule-strong px-7 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink active:translate-y-px"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-full border border-rule-strong px-7 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink active:translate-y-px"
               >
                 GitHub
                 <ArrowUpRight
@@ -130,7 +130,7 @@ export default function Hero() {
                   className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </a>
-              <span className="readout ml-1 hidden text-xs font-medium text-ink-soft sm:inline">
+              <span className="readout mt-1 hidden text-xs font-medium text-ink-soft sm:ml-1 sm:inline">
                 07 sistem di bawah
               </span>
             </div>

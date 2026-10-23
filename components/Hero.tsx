@@ -3,17 +3,22 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { ArrowDownRight, ArrowUpRight } from "@phosphor-icons/react";
-import { profile, stats } from "@/lib/content";
+import StackOrbit from "./StackOrbit";
+import { useContent, useUi } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 import { gsap, useGSAP, prefersReducedMotion, EASE } from "@/lib/gsap";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
+  const { lang } = useLang();
+  const { profile, stats } = useContent();
+  const { openBadge, sendEmail } = useUi();
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
 
-      // One authored moment on load: the name resolves, the dossier settles,
+      // One authored moment on load: the name resolves, the rig settles,
       // the figures count up. Nothing else animates on load.
       // A safety timeout below re-pins the final state: if fonts or images
       // shift the layout mid-timeline, no line may be left half-hidden.
@@ -82,25 +87,26 @@ export default function Hero() {
           </p>
         </div>
 
-        <h1
-          id="hero-judul"
-          className="display mt-6 text-[clamp(3.6rem,13.5vw,11.5rem)] uppercase"
-        >
-          <span className="hero-line block overflow-hidden pb-[0.08em]">
-            <span>Fadhli</span>
-          </span>
-          <span className="hero-line -mt-[0.03em] block overflow-hidden pt-[0.03em] pb-[0.1em]">
-            <span className="text-outline">Rajwaa</span>
-          </span>
-        </h1>
+        <div className="mt-8 grid items-center gap-x-12 gap-y-10 lg:grid-cols-[1fr_26rem]">
+          <div className="min-w-0">
+            <h1
+              id="hero-judul"
+              className="display text-[clamp(2.6rem,7.5vw,5.5rem)] uppercase"
+            >
+              <span className="hero-line block overflow-hidden pb-[0.08em]">
+                <span>Fadhli</span>
+              </span>
+              <span className="hero-line -mt-[0.03em] block overflow-hidden pt-[0.03em] pb-[0.1em]">
+                <span className="text-outline">Rajwaa</span>
+              </span>
+            </h1>
 
-        <div className="mt-10 grid items-start gap-x-12 gap-y-10 md:grid-cols-[1fr_19rem] lg:grid-cols-[1fr_22rem]">
-          <div className="max-w-[44rem]">
-            <p className="hero-fade max-w-[52ch] text-base leading-relaxed text-ink-soft sm:text-lg">
-              Backend developer dengan pengalaman di perangkat lunak perbankan.
-              Sekarang membangun produk kesehatan dan pemerintahan sebagai solo
-              builder — dari skema basis data sampai antarmuka yang dipakai
-              orang setiap hari.
+            <p className="hero-fade mt-6 max-w-[52ch] text-base leading-relaxed text-ink-soft sm:text-lg">
+              {pick(
+                lang,
+                "Backend developer dengan pengalaman di perangkat lunak perbankan. Sekarang membangun produk kesehatan dan pemerintahan sebagai solo builder — dari skema basis data sampai antarmuka yang dipakai orang setiap hari.",
+                "Backend developer with experience in banking software. Now building health and government products as a solo builder — from database schema to interfaces people use every day.",
+              )}
             </p>
 
             <div className="hero-fade mt-8 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
@@ -108,7 +114,7 @@ export default function Hero() {
                 href="#kerja"
                 className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink active:translate-y-px"
               >
-                Lihat proyek
+                {pick(lang, "Lihat proyek", "View work")}
                 <ArrowDownRight
                   size={16}
                   weight="bold"
@@ -131,68 +137,54 @@ export default function Hero() {
                 />
               </a>
               <span className="readout mt-1 hidden text-xs font-medium text-ink-soft sm:ml-1 sm:inline">
-                07 sistem di bawah
+                {pick(lang, "07 sistem di bawah", "07 systems below")}
               </span>
             </div>
           </div>
 
-          {/* Dossier card: the person behind the systems. */}
-          <aside
-            aria-label="Profil singkat"
-            className="hero-fade overflow-hidden rounded-2xl border border-rule bg-paper-raised"
-          >
-            <div className="flex items-center justify-between border-b border-rule px-5 py-3">
-              <span className="label text-ink-mute">Dossier</span>
-              <span className="readout text-[11px] text-ink-mute">
-                No. 001
-              </span>
-            </div>
-            <div className="relative aspect-[16/9] overflow-hidden bg-paper-deep">
-              <Image
-                src="/images/fadhli.jpg"
-                alt="Fadhli Rajwaa Rahmana, full stack developer"
-                fill
-                priority
-                sizes="(max-width: 1024px) 90vw, 352px"
-                className="object-cover object-[50%_15%]"
-              />
-            </div>
-            <div className="px-5 py-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-ink">
-                    {profile.name}
-                  </p>
-                  <p className="mt-0.5 text-xs text-ink-mute">{profile.role}</p>
-                </div>
-                <p className="flex shrink-0 items-center gap-1.5 text-xs text-ink-mute">
-                  <span
-                    aria-hidden="true"
-                    className="relative flex size-1.5"
-                  >
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-60" />
-                    <span className="relative inline-flex size-1.5 rounded-full bg-signal" />
-                  </span>
-                  Terbuka
-                </p>
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-3 border-t border-rule pt-3">
-                <span className="readout text-[11px] text-ink-mute">
-                  {profile.location}
-                </span>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="text-xs font-medium text-signal hover:underline"
-                >
-                  Kirim surel
-                </a>
-              </div>
-            </div>
-          </aside>
+          {/* Interactive 3D stack visual instead of a static oversized portrait. */}
+          <div className="hero-fade min-w-0">
+            <StackOrbit />
+          </div>
         </div>
 
+        {/* Dossier strip: the person behind the systems. */}
+        <aside
+          aria-label={pick(lang, "Profil singkat", "Short profile")}
+          className="hero-fade mt-12 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-4 rounded-2xl border border-rule bg-paper-raised px-5 py-4 sm:flex sm:items-center sm:gap-5 sm:px-6"
+        >
+          <div className="relative size-14 shrink-0 overflow-hidden rounded-full border border-rule bg-paper-deep">
+            <Image
+              src="/images/fadhli.jpg"
+              alt="Fadhli Rajwaa Rahmana, full stack developer"
+              fill
+              sizes="56px"
+              className="object-cover object-[50%_15%]"
+            />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-ink">{profile.name}</p>
+            <p className="mt-0.5 truncate text-xs text-ink-mute">
+              {profile.role} · {profile.location}
+            </p>
+          </div>
+          <p className="flex items-center gap-1.5 text-xs text-ink-mute sm:ml-auto sm:shrink-0">
+            <span aria-hidden="true" className="relative flex size-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-60" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-signal" />
+            </span>
+            {openBadge}
+          </p>
+          <a
+            href={`mailto:${profile.email}`}
+            className="col-span-2 inline-flex h-11 items-center justify-center rounded-full bg-ink px-5 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink sm:col-span-1 sm:w-auto"
+          >
+            {sendEmail}
+          </a>
+        </aside>
+
         {/* The figures, counted up once on entry. */}
-        <dl className="mt-14 grid grid-cols-2 border-y border-rule lg:grid-cols-4">
+        <dl className="mt-10 grid grid-cols-2 border-y border-rule lg:grid-cols-4">
           {stats.map((stat, i) => (
             <div
               key={stat.label}

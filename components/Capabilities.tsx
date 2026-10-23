@@ -8,11 +8,15 @@ import {
   GitBranch,
 } from "@phosphor-icons/react";
 import { capabilities } from "@/lib/content";
+import { useContent } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 const icons = [BracketsCurly, Browser, Database, GitBranch];
 
 export default function Capabilities() {
+  const { lang } = useLang();
+  const { capabilities } = useContent();
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -69,18 +73,21 @@ export default function Capabilities() {
         <div>
           <p className="label flex items-center gap-3 text-signal">
             <span aria-hidden="true" className="h-px w-7 bg-signal/60" />
-            03 — Keahlian
+            03 — {pick(lang, "Keahlian", "Skills")}
           </p>
           <h2
             id="keahlian-judul"
             className="display mt-4 text-[clamp(2.6rem,7vw,5.5rem)]"
           >
-            Perkakas
+            {pick(lang, "Perkakas", "Toolbox")}
           </h2>
         </div>
         <p className="max-w-[34ch] text-sm leading-relaxed text-ink-soft">
-          Alat yang dipakai di proyek nyata. Yang belum pernah dipakai tidak
-          masuk daftar ini.
+          {pick(
+            lang,
+            "Alat yang dipakai di proyek nyata. Yang belum pernah dipakai tidak masuk daftar ini.",
+            "Tools used in real projects. Anything never used in production is not on this list.",
+          )}
         </p>
       </div>
 
@@ -100,7 +107,8 @@ export default function Capabilities() {
                   <Icon size={20} weight="regular" />
                 </span>
                 <span className="readout text-[11px] text-ink-mute">
-                  {String(cap.items.length).padStart(2, "0")} alat
+                  {String(cap.items.length).padStart(2, "0")}{" "}
+                  {pick(lang, "alat", "tools")}
                 </span>
               </div>
 
@@ -127,9 +135,13 @@ export default function Capabilities() {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rule bg-paper-deep px-6 py-4 sm:px-8">
-        <p className="label text-ink-soft">Bahasa</p>
+        <p className="label text-ink-soft">{pick(lang, "Bahasa", "Languages")}</p>
         <p className="text-sm text-ink">
-          Indonesia (asli) · Inggris (profesional)
+          {pick(
+            lang,
+            "Indonesia (asli) · Inggris (profesional)",
+            "Indonesian (native) · English (professional)",
+          )}
         </p>
       </div>
     </section>

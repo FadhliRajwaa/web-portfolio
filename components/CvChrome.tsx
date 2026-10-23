@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "@phosphor-icons/react";
+import { useUi } from "@/lib/i18n";
 
 export function BackHome() {
+  const { backHome } = useUi();
   return (
     <Link
       href="/"
@@ -15,7 +17,7 @@ export function BackHome() {
         aria-hidden="true"
         className="transition-transform duration-300 group-hover:-translate-x-0.5"
       />
-      Beranda
+      {backHome}
     </Link>
   );
 }

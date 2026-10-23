@@ -8,9 +8,13 @@ import {
   Copy,
 } from "@phosphor-icons/react";
 import { profile } from "@/lib/content";
+import { useContent } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 export default function Contact() {
+  const { lang } = useLang();
+  const { profile } = useContent();
   const [copied, setCopied] = useState(false);
   const root = useRef<HTMLElement>(null);
 
@@ -52,29 +56,36 @@ export default function Contact() {
       <div className="mx-auto max-w-[1480px] px-5 pt-20 pb-10 sm:px-8 sm:pt-28">
         <p className="label flex items-center gap-3 text-instrument-mute">
           <span aria-hidden="true" className="h-px w-7 bg-instrument-rule" />
-          04 — Kontak
+          04 — {pick(lang, "Kontak", "Contact")}
         </p>
 
         <h2
           id="kontak-judul"
           className="display mt-5 text-[clamp(2.8rem,9vw,7.5rem)] uppercase"
-          aria-label="Butuh sistem yang bisa dirawat?"
+          aria-label={pick(lang, "Butuh sistem yang bisa dirawat?", "Need a system built to last?")}
         >
           <span className="contact-word block overflow-hidden pb-[0.08em]">
-            <span className="block">Butuh sistem</span>
+            <span className="block">
+              {pick(lang, "Butuh sistem", "Need a system")}
+            </span>
           </span>
           <span className="contact-word block overflow-hidden pb-[0.1em]">
             <span className="block">
-              yang <span className="text-[#8fb0ff]">bisa dirawat?</span>
+              {pick(lang, "yang ", "built to ")}
+              <span className="text-[#8fb0ff]">
+                {pick(lang, "bisa dirawat?", "last?")}
+              </span>
             </span>
           </span>
         </h2>
 
         <div className="mt-8 grid gap-x-12 gap-y-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <p className="max-w-[52ch] text-base leading-relaxed text-instrument-mute sm:text-lg">
-            Saya menerima pekerjaan untuk aplikasi web, sistem internal, dan
-            pekerjaan backend. Ceritakan kebutuhannya lewat surel — saya balas
-            dengan pertanyaan yang perlu dijawab sebelum estimasi.
+            {pick(
+              lang,
+              "Saya menerima pekerjaan untuk aplikasi web, sistem internal, dan pekerjaan backend. Ceritakan kebutuhannya lewat surel — saya balas dengan pertanyaan yang perlu dijawab sebelum estimasi.",
+              "I take on web apps, internal systems, and backend work. Tell me what you need by email — I'll reply with the questions that need answers before an estimate.",
+            )}
           </p>
 
           <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
@@ -82,7 +93,7 @@ export default function Contact() {
               href={`mailto:${profile.email}`}
               className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#eceae3] px-7 text-sm font-medium text-[#101319] transition-colors duration-200 hover:bg-[#8fb0ff] hover:text-[#05080a] active:translate-y-px"
             >
-              Kirim surel
+              {pick(lang, "Kirim surel", "Send email")}
               <ArrowUpRight
                 size={16}
                 weight="bold"
@@ -102,7 +113,9 @@ export default function Contact() {
                 <Copy size={15} weight="regular" aria-hidden="true" />
               )}
               <span aria-live="polite">
-                {copied ? "Tersalin" : "Salin alamat"}
+                {copied
+                  ? pick(lang, "Tersalin", "Copied")
+                  : pick(lang, "Salin alamat", "Copy address")}
               </span>
             </button>
           </div>
@@ -110,11 +123,11 @@ export default function Contact() {
 
         <dl className="mt-14 grid gap-x-8 gap-y-6 border-t border-instrument-rule pt-7 sm:grid-cols-2 lg:grid-cols-4">
           <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-            <dt className="label text-instrument-mute">Surel</dt>
+            <dt className="label text-instrument-mute">{pick(lang, "Surel", "Email")}</dt>
             <dd className="mt-1.5 text-sm break-words">{profile.email}</dd>
           </div>
           <div>
-            <dt className="label text-instrument-mute">Telepon</dt>
+            <dt className="label text-instrument-mute">{pick(lang, "Telepon", "Phone")}</dt>
             <dd className="readout mt-1.5 text-sm">{profile.phone}</dd>
           </div>
           <div>

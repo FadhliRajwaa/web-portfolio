@@ -3,10 +3,13 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Lock, Minus, Plus } from "@phosphor-icons/react";
-import { projects, type Project } from "@/lib/content";
+import type { Project } from "@/lib/content";
+import { useContent } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
+  const { lang } = useLang();
   const [index, setIndex] = useState(0);
   if (!shots.length) return null;
   const shot = shots[index];
@@ -33,7 +36,7 @@ function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
         {shots.length > 1 ? (
           <div
             role="tablist"
-            aria-label={`Tangkapan layar ${name}`}
+            aria-label={pick(lang, `Tangkapan layar ${name}`, `Screenshots of ${name}`)}
             className="flex shrink-0 gap-1.5"
           >
             {shots.map((s, i) => (
@@ -41,7 +44,7 @@ function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
                 key={s.src}
                 role="tab"
                 aria-selected={i === index}
-                aria-label={`Tangkapan ${i + 1}: ${s.caption}`}
+                aria-label={pick(lang, `Tangkapan ${i + 1}: ${s.caption}`, `Shot ${i + 1}: ${s.caption}`)}
                 onClick={() => setIndex(i)}
                 className={`h-11 w-[4.25rem] overflow-hidden rounded-md border transition-all duration-200 ${
                   i === index
@@ -74,6 +77,7 @@ function ProjectCard({
   open: boolean;
   onToggle: () => void;
 }) {
+  const { lang } = useLang();
   const btnId = `proyek-btn-${project.slug}`;
   const panelId = `proyek-panel-${project.slug}`;
 
@@ -146,11 +150,11 @@ function ProjectCard({
             <div className="min-w-0">
               <dl className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-4 min-[420px]:grid-cols-2">
                 <div>
-                  <dt className="label text-ink-mute">Peran</dt>
+                  <dt className="label text-ink-mute">{pick(lang, "Peran", "Role")}</dt>
                   <dd className="mt-1 text-sm text-ink">{project.role}</dd>
                 </div>
                 <div>
-                  <dt className="label text-ink-mute">Periode</dt>
+                  <dt className="label text-ink-mute">{pick(lang, "Periode", "Period")}</dt>
                   <dd className="readout mt-1 text-sm text-ink">
                     {project.period}
                   </dd>
@@ -161,12 +165,12 @@ function ProjectCard({
                 {project.summary}
               </p>
 
-              <h4 className="label mt-6 text-signal">Masalah</h4>
+              <h4 className="label mt-6 text-signal">{pick(lang, "Masalah", "Problem")}</h4>
               <p className="mt-2 max-w-[56ch] text-sm leading-relaxed text-ink-soft">
                 {project.problem}
               </p>
 
-              <h4 className="label mt-6 text-signal">Yang dibangun</h4>
+              <h4 className="label mt-6 text-signal">{pick(lang, "Yang dibangun", "What was built")}</h4>
               <ul className="mt-2 divide-y divide-rule border-t border-rule">
                 {project.built.map((item, i) => (
                   <li key={item} className="flex gap-3 py-2.5">
@@ -181,7 +185,7 @@ function ProjectCard({
               </ul>
 
               <div className="mt-5 rounded-xl bg-signal-soft/60 px-4 py-3.5">
-                <h4 className="label text-signal">Hasil</h4>
+                <h4 className="label text-signal">{pick(lang, "Hasil", "Outcome")}</h4>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink">
                   {project.outcome}
                 </p>
@@ -205,7 +209,7 @@ function ProjectCard({
                   rel="noreferrer noopener"
                   className="group mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink"
                 >
-                  Buka situs
+                  {pick(lang, "Buka situs", "Visit site")}
                   <ArrowUpRight
                     size={14}
                     weight="bold"
@@ -228,8 +232,11 @@ function ProjectCard({
                     className="text-ink-mute"
                   />
                   <p className="max-w-[38ch] text-sm text-ink-mute">
-                    Tampilan tidak dapat ditampilkan karena perjanjian
-                    kerahasiaan dengan klien.
+                    {pick(
+                      lang,
+                      "Tampilan tidak dapat ditampilkan karena perjanjian kerahasiaan dengan klien.",
+                      "Screenshots can't be shown under the client NDA.",
+                    )}
                   </p>
                 </div>
               )}
@@ -242,6 +249,8 @@ function ProjectCard({
 }
 
 export default function Work() {
+  const { lang } = useLang();
+  const { projects } = useContent();
   const [openSlug, setOpenSlug] = useState<string | null>(projects[0]?.slug ?? null);
   const root = useRef<HTMLElement>(null);
 
@@ -293,18 +302,22 @@ export default function Work() {
         <div className="min-w-0">
           <p className="label flex items-center gap-3 text-signal">
             <span aria-hidden="true" className="h-px w-7 bg-signal/60" />
-            01 — Proyek
+            01 — {pick(lang, "Proyek", "Work")}
           </p>
           <h2
             id="kerja-judul"
             className="display mt-4 text-[clamp(2.6rem,7vw,5.5rem)]"
           >
-            Indeks kerja
+            {pick(lang, "Indeks kerja", "Work index")}
           </h2>
         </div>
         <p className="readout max-w-[26ch] text-left text-[11px] leading-relaxed text-ink-mute sm:text-right">
-          {String(projects.length).padStart(2, "0")} sistem · 2025—2026 · klik
-          untuk membuka berkas
+          {String(projects.length).padStart(2, "0")}{" "}
+          {pick(
+            lang,
+            "sistem · 2025—2026 · klik untuk membuka berkas",
+            "systems · 2025—2026 · click to open a file",
+          )}
         </p>
       </div>
 

@@ -1,5 +1,7 @@
 import ThemeScript from "@/components/ThemeScript";
 import HydrationGuard from "@/components/HydrationGuard";
+import { LangProvider } from "@/components/Lang";
+import SkipLink from "@/components/SkipLink";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
@@ -10,15 +12,10 @@ import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
-    <>
+    <LangProvider>
       <ThemeScript />
       <HydrationGuard />
-      <a
-        href="#kerja"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-110 focus:rounded-full focus:bg-ink focus:px-5 focus:py-2.5 focus:text-sm focus:text-paper"
-      >
-        Lompat ke konten
-      </a>
+      <SkipLink />
 
       <Nav />
 
@@ -33,6 +30,6 @@ export default function Home() {
       <Contact />
 
       <div className="grain" aria-hidden="true" />
-    </>
+    </LangProvider>
   );
 }

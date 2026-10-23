@@ -3,19 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, List, X } from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
-import { profile } from "@/lib/content";
-
-const links = [
-  { href: "#kerja", label: "Proyek", index: "01" },
-  { href: "#pengalaman", label: "Pengalaman", index: "02" },
-  { href: "#keahlian", label: "Keahlian", index: "03" },
-  { href: "#kontak", label: "Kontak", index: "04" },
-];
+import LangToggle from "./LangToggle";
+import { useContent, useUi } from "@/lib/i18n";
 
 export default function Nav() {
+  const { profile } = useContent();
+  const {
+    navLinks,
+    available,
+    sendEmail,
+    openMenu,
+    closeMenu,
+    menu,
+    backHomeAria,
+  } = useUi();
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-  const menu = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -38,7 +42,7 @@ export default function Nav() {
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
-    const first = menu.current?.querySelector<HTMLElement>("a, button");
+    const first = menuRef.current?.querySelector<HTMLElement>("a, button");
     first?.focus();
 
     function onKey(e: KeyboardEvent) {
@@ -46,8 +50,8 @@ export default function Nav() {
         setOpen(false);
         return;
       }
-      if (e.key !== "Tab" || !menu.current) return;
-      const items = menu.current.querySelectorAll<HTMLElement>(
+      if (e.key !== "Tab" || !menuRef.current) return;
+      const items = menuRef.current.querySelectorAll<HTMLElement>(
         "a[href], button:not([disabled])",
       );
       if (!items.length) return;
@@ -81,7 +85,7 @@ export default function Nav() {
             <a
               href="#atas"
               className="group flex items-center gap-2.5"
-              aria-label={`${profile.name}, kembali ke atas`}
+              aria-label={backHomeAria(profile.name)}
             >
               <span
                 aria-hidden="true"
@@ -98,14 +102,14 @@ export default function Nav() {
                     aria-hidden="true"
                     className="inline-block size-1.5 rounded-full bg-signal"
                   />
-                  Terbuka untuk proyek
+                  {available}
                 </span>
               </span>
             </a>
 
             <nav aria-label="Navigasi utama" className="hidden lg:block">
               <ul className="flex items-center gap-1">
-                {links.map((link) => (
+                {navLinks.map((link) => (
                   <li key={link.href}>
                     <a
                       href={link.href}
@@ -122,12 +126,13 @@ export default function Nav() {
             </nav>
 
             <div className="flex items-center gap-2">
+              <LangToggle />
               <ThemeToggle className="rounded-full" />
               <a
                 href={`mailto:${profile.email}`}
                 className="group hidden h-11 items-center gap-1.5 rounded-full bg-ink px-5 text-sm font-medium text-paper transition-colors duration-200 hover:bg-signal hover:text-signal-ink sm:inline-flex"
               >
-                Kirim surel
+                {sendEmail}
                 <ArrowUpRight
                   size={14}
                   weight="bold"
@@ -140,7 +145,7 @@ export default function Nav() {
                 onClick={() => setOpen(true)}
                 aria-expanded={open}
                 aria-controls="menu-seluler"
-                aria-label="Buka menu"
+                aria-label={openMenu}
                 className="inline-flex size-11 items-center justify-center rounded-full border border-rule text-ink transition-colors hover:border-ink lg:hidden"
               >
                 <List size={18} weight="bold" aria-hidden="true" />
@@ -163,25 +168,25 @@ export default function Nav() {
 
       {open ? (
         <div
-          ref={menu}
+          ref={menuRef}
           id="menu-seluler"
           className="fixed inset-0 z-85 flex flex-col bg-paper lg:hidden"
         >
           <div className="flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-2">
-            <span className="label text-ink-mute">Menu</span>
+            <span className="label text-ink-mute">{menu}</span>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Tutup menu"
+              aria-label={closeMenu}
               className="inline-flex size-11 items-center justify-center rounded-full border border-rule text-ink"
             >
               <X size={18} weight="bold" aria-hidden="true" />
             </button>
           </div>
 
-          <nav aria-label="Navigasi seluler" className="flex flex-1 flex-col justify-center px-5 pb-10">
+          <nav aria-label={menu} className="flex flex-1 flex-col justify-center px-5 pb-10">
             <ul className="border-t border-rule">
-              {links.map((link) => (
+              {navLinks.map((link) => (
                 <li key={link.href} className="border-b border-rule">
                   <a
                     href={link.href}

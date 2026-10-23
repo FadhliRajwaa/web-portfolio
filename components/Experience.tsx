@@ -7,11 +7,19 @@ import {
   Certificate,
 } from "@phosphor-icons/react";
 import { profile } from "@/lib/content";
+import { useContent } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 
 const meta = [
   { label: "Basis", value: "Semarang, remote" },
   { label: "Fokus", value: "Backend dan full stack" },
   { label: "Pendidikan", value: "S1 Teknik Informatika, UNISBANK" },
+];
+
+const metaEn = [
+  { label: "Based", value: "Semarang, remote" },
+  { label: "Focus", value: "Backend and full stack" },
+  { label: "Education", value: "BSc Informatics, UNISBANK" },
 ];
 
 const certs = [
@@ -27,6 +35,29 @@ const certs = [
   },
   {
     name: "Coding Camp Front-End & Back-End — 910 jam",
+    issuer: "Dicoding × DBS Foundation",
+    year: "2025",
+  },
+  {
+    name: "English for Business Communication — 82%",
+    issuer: "The British Institute",
+    year: "2025",
+  },
+];
+
+const certsEn = [
+  {
+    name: "Secure Software Development Life Cycle",
+    issuer: "PT Skyworx Indonesia",
+    year: "2026",
+  },
+  {
+    name: "API Automation Using Postman — 90/100",
+    issuer: "PT Skyworx Indonesia",
+    year: "2026",
+  },
+  {
+    name: "Coding Camp Front-End & Back-End — 910 hours",
     issuer: "Dicoding × DBS Foundation",
     year: "2025",
   },
@@ -158,6 +189,8 @@ function FlowCard({ flow, index }: { flow: Flow; index: number }) {
 }
 
 export default function Experience() {
+  const { lang } = useLang();
+  const { profile, experience } = useContent();
   const [spot, setSpot] = useState({ x: 50, y: 50 });
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -188,17 +221,17 @@ export default function Experience() {
         <div>
           <p className="label flex items-center gap-3 text-signal">
             <span aria-hidden="true" className="h-px w-7 bg-signal/60" />
-            02 — Pengalaman
+            02 — {pick(lang, "Pengalaman", "Experience")}
           </p>
           <h2
             id="pengalaman-judul"
             className="display mt-4 text-[clamp(2.6rem,7vw,5.5rem)]"
           >
-            Jalur waktu
+            {pick(lang, "Jalur waktu", "Timeline")}
           </h2>
         </div>
         <p className="readout max-w-[30ch] text-left text-[11px] leading-relaxed text-ink-mute sm:text-right">
-          Perbankan → pemerintahan → produk mandiri
+          {pick(lang, "Perbankan → pemerintahan → produk mandiri", "Banking → government → indie products")}
         </p>
       </div>
 
@@ -227,14 +260,18 @@ export default function Experience() {
               {profile.name}
             </p>
             <p className="display-tight mt-1 max-w-[16ch] text-[1.65rem] leading-[1.05] text-white sm:text-4xl">
-              Sistem yang bisa dipercaya saat datanya salah.
+              {pick(
+                lang,
+                "Sistem yang bisa dipercaya saat datanya salah.",
+                "Systems you can trust when the data is wrong.",
+              )}
             </p>
             <div className="mt-5 flex flex-wrap gap-2.5">
               <a
                 href="/cv"
                 className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-[#101319] transition-colors duration-200 hover:bg-signal hover:text-signal-ink"
               >
-                Lihat CV
+                {pick(lang, "Lihat CV", "View CV")}
                 <ArrowUpRight
                   size={15}
                   weight="bold"
@@ -252,7 +289,7 @@ export default function Experience() {
               </a>
             </div>
             <dl className="mt-6 grid grid-cols-1 gap-x-3 gap-y-3 border-t border-white/25 pt-4 min-[420px]:grid-cols-3">
-              {meta.map((m) => (
+              {pick(lang, meta, metaEn).map((m) => (
                 <div key={m.label}>
                   <dt className="readout text-[10px] tracking-[0.1em] text-white/60 uppercase">
                     {m.label}
@@ -268,17 +305,17 @@ export default function Experience() {
 
         {/* Flow cards. */}
         <div className="flex flex-col gap-4">
-          {flows.map((flow, i) => (
+          {experience.map((flow: Flow, i: number) => (
             <FlowCard key={flow.company} flow={flow} index={i} />
           ))}
 
           <div className="rounded-2xl border border-rule bg-paper-raised px-5 py-5 sm:px-7">
             <h3 className="label flex items-center gap-2 text-ink-mute">
               <Certificate size={14} weight="regular" aria-hidden="true" />
-              Sertifikasi
+              {pick(lang, "Sertifikasi", "Certifications")}
             </h3>
             <ul className="mt-3">
-              {certs.map((cert) => (
+              {pick(lang, certs, certsEn).map((cert) => (
                 <li
                   key={cert.name}
                   className="flex items-baseline justify-between gap-4 border-b border-rule/70 py-2.5 last:border-b-0"

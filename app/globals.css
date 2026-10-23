@@ -343,6 +343,25 @@
   }
 }
 
+/* 3D orbit rig: the tilt wrapper reads --rx/--ry custom props.
+   GSAP quickTo sets them with units; the CSS consumes them as angles. */
+.stack-orbit {
+  --rx: 0deg;
+  --ry: 0deg;
+  perspective: 1100px;
+}
+
+.orbit-tilt {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--ry)) rotateY(var(--rx));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-tilt {
+    transform: none;
+  }
+}
+
 /* GSAP sets these; without JS the content is already visible. */
 .reveal-line > span {
   display: block;

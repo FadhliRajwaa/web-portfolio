@@ -407,7 +407,7 @@ export const certifications = [
 export const profile = {
   name: "Fadhli Rajwaa Rahmana",
   shortName: "Fadhli Rajwaa",
-  role: "Full Stack Developer",
+  role: "Backend Developer",
   subtitle: "Backend .NET, frontend React, sistem kesehatan",
   email: "fadhlirajwaarahmana@gmail.com",
   phone: "+62 812-3171-2687",

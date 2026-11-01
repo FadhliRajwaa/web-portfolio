@@ -110,7 +110,7 @@ export default function Nav() {
                 <span className="mt-0.5 hidden items-center gap-1.5 text-[11px] text-ink-mute sm:flex">
                   <span
                     aria-hidden="true"
-                    className="inline-block size-1.5 rounded-full bg-signal"
+                    className="inline-block size-1.5 rounded-full bg-status-ok"
                   />
                   {available}
                 </span>

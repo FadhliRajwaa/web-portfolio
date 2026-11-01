@@ -291,7 +291,11 @@ export default function LiveEditor() {
         </div>
 
         {/* code */}
-        <pre className="min-h-0 flex-1 overflow-x-auto overflow-y-hidden px-3 pt-3 pb-1 font-mono text-[10.5px] leading-[1.6] [scrollbar-width:thin] sm:px-4 sm:pt-4 sm:text-[12.5px] sm:leading-[1.65]">
+        <pre
+          tabIndex={0}
+          aria-label="Kode sumber yang sedang diketik"
+          className="min-h-0 flex-1 overflow-x-auto overflow-y-hidden px-3 pt-3 pb-1 font-mono text-[10.5px] leading-[1.6] [scrollbar-width:thin] sm:px-4 sm:pt-4 sm:text-[12.5px] sm:leading-[1.65]"
+        >
           <code>
             {lines.map((line, i) => (
               <div key={i} className="whitespace-pre">

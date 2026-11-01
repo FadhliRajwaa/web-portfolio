@@ -1,12 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Lock, Minus, Plus } from "@phosphor-icons/react";
 import type { Project } from "@/lib/content";
 import { useContent } from "@/lib/i18n";
 import { useLang, pick } from "./Lang";
 import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+
+/** The featured entry (Spec 3.4): always rendered first, with a "Baru" badge. */
+const FEATURED_SLUG = "vibe2dev";
 
 function Gallery({ shots, name }: { shots: Project["shots"]; name: string }) {
   const { lang } = useLang();
@@ -80,6 +83,7 @@ function ProjectCard({
   const { lang } = useLang();
   const btnId = `proyek-btn-${project.slug}`;
   const panelId = `proyek-panel-${project.slug}`;
+  const featured = project.slug === FEATURED_SLUG;
 
   return (
     <article className="project-row overflow-hidden rounded-2xl border border-rule bg-paper-raised transition-colors duration-300 has-[button[aria-expanded='true']]:border-signal/60">
@@ -104,6 +108,12 @@ function ProjectCard({
             <span className="readout rounded-full border border-rule bg-paper-deep px-2.5 py-1 text-[10px] tracking-[0.08em] text-ink-soft uppercase">
               {project.category}
             </span>
+            {featured ? (
+              <span className="readout inline-flex items-center gap-1.5 rounded-full bg-signal px-2.5 py-1 text-[10px] font-medium tracking-[0.08em] text-signal-ink uppercase">
+                <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+                {pick(lang, "Baru", "New")}
+              </span>
+            ) : null}
             {project.confidential ? (
               <span className="readout inline-flex items-center gap-1.5 rounded-full border border-rule px-2.5 py-1 text-[10px] text-ink-mute">
                 <Lock size={10} weight="bold" aria-hidden="true" />
@@ -251,7 +261,17 @@ function ProjectCard({
 export default function Work() {
   const { lang } = useLang();
   const { projects } = useContent();
-  const [openSlug, setOpenSlug] = useState<string | null>(projects[0]?.slug ?? null);
+  // Spec 3.4: vibe2dev is always first. Sorting here (not in the data) keeps
+  // the featured card correct even if the source order ever changes.
+  const ordered = useMemo(
+    () =>
+      [...projects].sort((a, b) => {
+        const rank = (p: Project) => (p.slug === FEATURED_SLUG ? 0 : 1);
+        return rank(a) - rank(b);
+      }),
+    [projects],
+  );
+  const [openSlug, setOpenSlug] = useState<string | null>(ordered[0]?.slug ?? null);
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -312,7 +332,7 @@ export default function Work() {
           </h2>
         </div>
         <p className="readout max-w-[26ch] text-left text-[11px] leading-relaxed text-ink-mute sm:text-right">
-          {String(projects.length).padStart(2, "0")}{" "}
+          {String(ordered.length).padStart(2, "0")}{" "}
           {pick(
             lang,
             "sistem · 2025—2026 · klik untuk membuka berkas",
@@ -322,7 +342,7 @@ export default function Work() {
       </div>
 
       <div className="mt-10 flex flex-col gap-4">
-        {projects.map((project) => (
+        {ordered.map((project) => (
           <ProjectCard
             key={project.slug}
             project={project}

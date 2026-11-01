@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Hallmark · macrostructure: Workbench-Index · theme: Cobalt-Dossier (custom)
+/* Studio Console · macrostructure: console shell · theme: Studio Console (putih + dark mode)
  * audience = perekrut & klien · use = bukti kerja & kontak · tone = editorial-technical
  * z scale: grain 100, nav 80, menu 85, progress 82, skip link 110 */
 
@@ -18,6 +18,11 @@
   --color-ink-mute: var(--ink-mute);
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
+
+  /* Status: badges and dots only, never decoration. */
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-danger: var(--status-danger);
 
   /* One accent: cobalt. Engineering blue, never gradient. */
   --color-signal: var(--signal);
@@ -46,6 +51,10 @@
   --rule: #E2E7EB;
   --rule-strong: #C3CCD3;
 
+  --status-ok: #0E7A4C;
+  --status-warn: #9A6200;
+  --status-danger: #C03535;
+
   --signal: #2447f5;
   --signal-ink: #ffffff;
   --signal-soft: #d9e1ff;
@@ -68,6 +77,10 @@
   --ink-mute: #8B949B;
   --rule: #232C34;
   --rule-strong: #39434D;
+
+  --status-ok: #34D399;
+  --status-warn: #FBBF24;
+  --status-danger: #C03535;
 
   --signal: #8aa5ff;
   --signal-ink: #0a0f22;

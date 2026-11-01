@@ -3,6 +3,7 @@ import HydrationGuard from "@/components/HydrationGuard";
 import { LangProvider } from "@/components/Lang";
 import SkipLink from "@/components/SkipLink";
 import Nav from "@/components/Nav";
+import CommandPalette from "@/components/CommandPalette";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
 import Work from "@/components/Work";
@@ -20,6 +21,7 @@ export default function Home() {
       <SkipLink />
 
       <Nav />
+      <CommandPalette />
 
       <main>
         <Hero />

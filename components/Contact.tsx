@@ -56,7 +56,7 @@ export default function Contact() {
       <div className="mx-auto max-w-[1480px] px-5 pt-20 pb-10 sm:px-8 sm:pt-28">
         <p className="label flex items-center gap-3 text-instrument-mute">
           <span aria-hidden="true" className="h-px w-7 bg-instrument-rule" />
-          04 — {pick(lang, "Kontak", "Contact")}
+          06 — {pick(lang, "Kontak", "Contact")}
         </p>
 
         <h2

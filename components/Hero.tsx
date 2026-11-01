@@ -1,18 +1,118 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowDownRight, ArrowUpRight } from "@phosphor-icons/react";
-import StackOrbit from "./StackOrbit";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Check,
+  Copy,
+} from "@phosphor-icons/react";
+import LiveEditor from "./LiveEditor";
 import { useContent, useUi } from "@/lib/i18n";
 import { useLang, pick } from "./Lang";
 import { gsap, useGSAP, prefersReducedMotion, EASE } from "@/lib/gsap";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
+  // The editor owns the typing state; its rendered <pre> is the only public
+  // surface for "the code on screen right now". Reading it keeps LiveEditor
+  // untouched while the copy button still copies exactly what is visible.
+  const editorHost = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
+  // The window header names the file and repeats the editor's own typing
+  // state, so the two can never disagree: both are read from the chrome
+  // LiveEditor renders, never duplicated here.
+  const [editorFile, setEditorFile] = useState("");
+  const [editorSaved, setEditorSaved] = useState(false);
   const { lang } = useLang();
   const { profile, stats } = useContent();
   const { openBadge, sendEmail } = useUi();
+
+  useEffect(() => {
+    const shell = editorHost.current?.firstElementChild;
+    const tabBar = shell?.firstElementChild;
+    if (!tabBar) return;
+
+    // Text-only reads: the file name is the word ending in ".cs" and the
+    // state is LiveEditor's own "typing"/"saved". Both reads are optional —
+    // if that component ever renames them the header falls back to its
+    // bilingual default instead of breaking.
+    const read = () => {
+      const words = [...tabBar.querySelectorAll("span")].map(
+        (s) => s.textContent?.trim() ?? "",
+      );
+      setEditorFile((prev) => {
+        const next = words.find((w) => w.endsWith(".cs")) ?? "";
+        return prev === next ? prev : next;
+      });
+      setEditorSaved((prev) => {
+        const next = words.includes("saved");
+        return prev === next ? prev : next;
+      });
+    };
+
+    read();
+    // Typing fires a mutation per character; coalesce reads to one per frame
+    // so mirroring never competes with the typing timer.
+    let frame = 0;
+    const observer = new MutationObserver(() => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        read();
+      });
+    });
+    observer.observe(tabBar, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    return () => {
+      observer.disconnect();
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  async function copyCode() {
+    const pre = editorHost.current?.querySelector("pre");
+    // Each rendered line is its own <div>, so textContent alone would join
+    // the whole file into one line. Read line by line instead. The
+    // zero-width caret spacer is markup, not code: strip it or the pasted
+    // snippet carries an invisible character.
+    const lines = pre ? [...pre.querySelectorAll("div")] : [];
+    const text = lines
+      .map((line) => (line.textContent ?? "").replace(/​/g, ""))
+      .join("\n")
+      .trimEnd();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      // Same shape as Contact.tsx:39-47 — one domain-appropriate fallback
+      // in the catch instead of a silent failure. Here that is the legacy
+      // selection copy, so the button still puts the code on the clipboard
+      // when the async Clipboard API is denied (non-HTTPS, permissions).
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.top = "-1000px";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      try {
+        if (document.execCommand("copy")) {
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 2200);
+        }
+      } finally {
+        area.remove();
+      }
+    }
+  }
 
   useGSAP(
     () => {
@@ -137,14 +237,60 @@ export default function Hero() {
                 />
               </a>
               <span className="readout mt-1 hidden text-xs font-medium text-ink-soft sm:ml-1 sm:inline">
-                {pick(lang, "07 sistem di bawah", "07 systems below")}
+                {pick(lang, "08 sistem di bawah", "08 systems below")}
               </span>
             </div>
           </div>
 
-          {/* Interactive 3D stack visual instead of a static oversized portrait. */}
+          {/* The work itself, live: the editor inside a white console window. */}
           <div className="hero-fade min-w-0">
-            <StackOrbit />
+            <div className="overflow-hidden rounded-2xl border border-rule bg-paper-raised shadow-[0_8px_30px_-12px_rgba(16,19,25,0.25)] dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)]">
+              <div className="flex items-center gap-2.5 border-b border-rule px-3 py-2 sm:px-4">
+                <span aria-hidden="true" className="flex shrink-0 gap-1.5">
+                  <span className="size-2.5 rounded-full border border-rule-strong" />
+                  <span className="size-2.5 rounded-full border border-rule-strong" />
+                  <span className="size-2.5 rounded-full border border-rule-strong" />
+                </span>
+                <span className="readout min-w-0 truncate text-[11px] text-ink-soft">
+                  {editorFile || pick(lang, "editor langsung", "live editor")}
+                </span>
+                <span
+                  aria-live="polite"
+                  className={`readout ml-auto shrink-0 text-[10px] tracking-wide ${
+                    editorSaved ? "text-status-ok" : "text-ink-mute"
+                  }`}
+                >
+                  {editorSaved
+                    ? pick(lang, "tersimpan", "saved")
+                    : pick(lang, "mengetik", "typing")}
+                </span>
+                <button
+                  type="button"
+                  onClick={copyCode}
+                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-rule px-3 text-[11px] font-medium text-ink-soft transition-colors duration-200 hover:border-ink hover:text-ink active:translate-y-px"
+                >
+                  {copied ? (
+                    <Check size={13} weight="bold" aria-hidden="true" />
+                  ) : (
+                    <Copy size={13} weight="regular" aria-hidden="true" />
+                  )}
+                  {copied
+                    ? pick(lang, "Tersalin", "Copied")
+                    : pick(lang, "Salin kode", "Copy code")}
+                </button>
+              </div>
+
+              {/* The editor keeps its own chrome: terminal strip and status
+                  bar are the window body and footer. Only its tab strip is
+                  hidden (CSS only, markup untouched) because the window
+                  header above already names the file and the typing state. */}
+              <div
+                ref={editorHost}
+                className="h-[330px] sm:h-[360px] lg:h-[380px] [&>div>*:first-child]:hidden"
+              >
+                <LiveEditor />
+              </div>
+            </div>
           </div>
         </div>
 

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, List, X } from "@phosphor-icons/react";
+import { ArrowUpRight, List, MagnifyingGlass, X } from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
 import LangToggle from "./LangToggle";
 import { useContent, useUi } from "@/lib/i18n";
+import { useLang, pick } from "./Lang";
 
 export default function Nav() {
   const { profile } = useContent();
@@ -17,9 +18,18 @@ export default function Nav() {
     menu,
     backHomeAria,
   } = useUi();
+  const { lang } = useLang();
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const searchLabel = pick(lang, "Cari", "Search");
+  // The palette is Task 6's component; this button only announces intent so
+  // the two tasks never share an import. Without a listener yet the event is
+  // a no-op, which is why the button is marked as a progressive enhancement.
+  function openPalette() {
+    window.dispatchEvent(new CustomEvent("open-command-palette"));
+  }
 
   useEffect(() => {
     let raf = 0;
@@ -113,7 +123,7 @@ export default function Nav() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="group flex items-baseline gap-1.5 rounded-full px-4 py-2.5 text-sm text-ink-soft transition-colors duration-200 hover:bg-paper-deep hover:text-ink"
+                      className="group flex items-baseline gap-1.5 rounded-full px-3 py-2.5 text-sm text-ink-soft transition-colors duration-200 hover:bg-paper-deep hover:text-ink xl:px-4"
                     >
                       <span className="readout text-[10px] text-ink-mute transition-colors group-hover:text-signal">
                         {link.index}
@@ -125,7 +135,22 @@ export default function Nav() {
               </ul>
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 xl:gap-2">
+              <button
+                type="button"
+                onClick={openPalette}
+                aria-label={searchLabel}
+                data-command-palette-trigger
+                className="group hidden h-11 w-11 items-center justify-center gap-2 rounded-full border border-rule text-ink-soft transition-colors duration-200 hover:border-ink hover:text-ink active:translate-y-px lg:inline-flex xl:w-auto xl:px-3"
+              >
+                <MagnifyingGlass size={16} weight="regular" aria-hidden="true" />
+                <span className="readout hidden text-[10px] font-medium tracking-wider text-ink-mute uppercase xl:inline">
+                  {searchLabel}
+                </span>
+                <kbd className="readout hidden rounded border border-rule px-1.5 py-0.5 text-[10px] leading-none text-ink-mute xl:inline">
+                  Ctrl K
+                </kbd>
+              </button>
               <LangToggle />
               <ThemeToggle className="rounded-full" />
               <a
@@ -212,10 +237,24 @@ export default function Nav() {
               ))}
             </ul>
 
+            <button
+              type="button"
+              data-command-palette-trigger
+              onClick={() => {
+                setOpen(false);
+                openPalette();
+              }}
+              aria-label={searchLabel}
+              className="mt-8 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-rule text-sm text-ink-soft transition-colors duration-200 hover:border-ink hover:text-ink active:translate-y-px"
+            >
+              <MagnifyingGlass size={16} weight="regular" aria-hidden="true" />
+              {searchLabel}
+            </button>
+
             <a
               href={`mailto:${profile.email}`}
               onClick={() => setOpen(false)}
-              className="mt-8 flex h-13 w-full items-center justify-center rounded-full bg-ink text-sm font-medium text-paper"
+              className="mt-3 flex h-13 w-full items-center justify-center rounded-full bg-ink text-sm font-medium text-paper"
             >
               {profile.email}
             </a>

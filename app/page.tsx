@@ -6,6 +6,8 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
 import Work from "@/components/Work";
+import AiSkills from "@/components/AiSkills";
+import Workflow from "@/components/Workflow";
 import Experience from "@/components/Experience";
 import Capabilities from "@/components/Capabilities";
 import Contact from "@/components/Contact";
@@ -23,6 +25,8 @@ export default function Home() {
         <Hero />
         <Ticker />
         <Work />
+        <AiSkills />
+        <Workflow />
         <Experience />
         <Capabilities />
       </main>

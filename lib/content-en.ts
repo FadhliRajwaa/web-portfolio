@@ -1,8 +1,49 @@
-import type { Experience, Project } from "./content";
+import type { AiSkill, Experience, Project, WorkflowStep } from "./content";
 
 /** English mirror of lib/content.ts. Same order, same slugs. */
 
 export const projectsEn: Project[] = [
+  {
+    slug: "vibe2dev",
+    index: "00",
+    name: "Vibe2Dev",
+    category: "Education",
+    role: "Solo builder",
+    period: "2026",
+    tagline: "Bilingual coding learning platform with 113 courses and a JWT course gate.",
+    summary:
+      "A bilingual Indonesian/English coding learning platform with 113 courses, a JWT-based course gate, activity audit trails, and admin/user dashboards.",
+    problem:
+      "Learning to code from AI without fundamentals lets people copy without understanding. A structured path from zero to comprehension is needed.",
+    built: [
+      "113 bilingual ID/EN courses with interactive modules",
+      "JWT-based course gate",
+      "Learning activity audit trail",
+      "Admin and user dashboards",
+      "Bilingual documentation",
+    ],
+    outcome:
+      "Live at vibe2dev.my.id with a consistent white brutalism style.",
+    stack: ["Next.js", "Prisma", "JWT", "CodeMirror", "Tailwind CSS"],
+    live: "https://www.vibe2dev.my.id",
+    shots: [
+      {
+        src: "/work/vibe2dev/home.jpg",
+        alt: "Vibe2Dev home page with headline and course statistics",
+        caption: "Home: headline, statistics, and stack marquee.",
+      },
+      {
+        src: "/work/vibe2dev/roadmap.jpg",
+        alt: "Roadmap page for the frontend/backend/fullstack tracks",
+        caption: "Roadmap: structured learning paths.",
+      },
+      {
+        src: "/work/vibe2dev/courses.jpg",
+        alt: "Platform course catalog",
+        caption: "Catalog: 113 bilingual courses.",
+      },
+    ],
+  },
   {
     slug: "rikkes-berkala",
     index: "01",
@@ -364,10 +405,66 @@ export const capabilitiesEn = [
 ];
 
 export const statsEn = [
-  { value: "7", label: "Products & systems" },
+  { value: "8", label: "Products & systems" },
   { value: "43", label: "Banking modules" },
   { value: "3", label: "Government agencies" },
   { value: "448", label: "REST routes" },
+];
+
+export const aiSkillsEn: AiSkill[] = [
+  {
+    id: "claude-code",
+    name: "Claude Code",
+    role: "Primary coding agent",
+    example:
+      "This site is built and verified with it: Playwright screenshots and axe audits on every change.",
+  },
+  {
+    id: "mcp",
+    name: "MCP",
+    role: "Tool connector for agents",
+    example:
+      "Repo research and vibe2dev screenshots are done straight from the work session.",
+  },
+  {
+    id: "router",
+    name: "9Router",
+    role: "Multi-model gateway",
+    example: "Routing between models for cost efficiency.",
+  },
+  {
+    id: "verifier",
+    name: "Playwright + axe",
+    role: "Automated verifier",
+    example: "0 WCAG AA violations in light+dark, 0px overflow from 320-1920.",
+  },
+];
+
+export const workflowStepsEn: WorkflowStep[] = [
+  {
+    id: "paham",
+    title: "Understand",
+    body: "Brief, repo, and data are read before a single line of code is written.",
+    artifact: "Written spec before implementation",
+  },
+  {
+    id: "bangun",
+    title: "Build with agents",
+    body: "Claude Code + MCP execute in small tasks with a review at every step.",
+    artifact: "One commit per task",
+  },
+  {
+    id: "verifikasi",
+    title: "Automated verification",
+    body: "Playwright screenshots and axe audits on every change.",
+    artifact: "0 violations, 0 overflow",
+  },
+  {
+    id: "rilis",
+    title: "Ship",
+    body: "Push to main, Vercel deploys automatically to a custom domain.",
+    artifact: "fadhliportfolio.my.id",
+  },
 ];
 
 export const profileEn = {

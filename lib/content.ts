@@ -18,7 +18,52 @@ export type Project = {
   live?: string;
 };
 
+export type AiSkill = { id: string; name: string; role: string; example: string };
+
+export type WorkflowStep = { id: string; title: string; body: string; artifact: string };
+
 export const projects: Project[] = [
+  {
+    slug: "vibe2dev",
+    index: "00",
+    name: "Vibe2Dev",
+    category: "Edukasi",
+    role: "Solo builder",
+    period: "2026",
+    tagline: "Platform belajar coding bilingual dengan 113 kursus dan gerbang JWT.",
+    summary:
+      "Platform belajar coding bilingual Indonesia/Inggris dengan 113 kursus, gerbang kursus berbasis JWT, audit trail aktivitas, dan dashboard admin/user.",
+    problem:
+      "Belajar coding dari AI tanpa fondasi membuat orang bisa menyalin tapi tidak memahami. Dibutuhkan jalur terstruktur dari nol sampai paham.",
+    built: [
+      "113 kursus bilingual ID/EN dengan modul interaktif",
+      "Gerbang kursus berbasis JWT",
+      "Audit trail aktivitas belajar",
+      "Dashboard admin dan user",
+      "Dokumentasi bilingual",
+    ],
+    outcome:
+      "Live di vibe2dev.my.id dengan gaya brutalism putih yang konsisten.",
+    stack: ["Next.js", "Prisma", "JWT", "CodeMirror", "Tailwind CSS"],
+    live: "https://www.vibe2dev.my.id",
+    shots: [
+      {
+        src: "/work/vibe2dev/home.jpg",
+        alt: "Beranda Vibe2Dev dengan headline dan statistik kursus",
+        caption: "Beranda: headline, statistik, dan marquee stack.",
+      },
+      {
+        src: "/work/vibe2dev/roadmap.jpg",
+        alt: "Halaman roadmap jalur frontend/backend/fullstack",
+        caption: "Roadmap: jalur belajar terstruktur.",
+      },
+      {
+        src: "/work/vibe2dev/courses.jpg",
+        alt: "Katalog kursus platform",
+        caption: "Katalog: 113 kursus bilingual.",
+      },
+    ],
+  },
   {
     slug: "rikkes-berkala",
     index: "01",
@@ -391,10 +436,66 @@ export const capabilities = [
 ];
 
 export const stats = [
-  { value: "7", label: "Produk dan sistem" },
+  { value: "8", label: "Produk dan sistem" },
   { value: "43", label: "Modul perbankan" },
   { value: "3", label: "Instansi pemerintahan" },
   { value: "448", label: "Route REST" },
+];
+
+export const aiSkills: AiSkill[] = [
+  {
+    id: "claude-code",
+    name: "Claude Code",
+    role: "Coding agent utama",
+    example:
+      "Situs ini dibangun dan diverifikasi dengannya: screenshot Playwright dan audit axe tiap perubahan.",
+  },
+  {
+    id: "mcp",
+    name: "MCP",
+    role: "Konektor tool untuk agen",
+    example:
+      "Riset repo dan screenshot vibe2dev dikerjakan langsung dari sesi kerja.",
+  },
+  {
+    id: "router",
+    name: "9Router",
+    role: "Gateway multi-model",
+    example: "Routing antar model untuk efisiensi biaya.",
+  },
+  {
+    id: "verifier",
+    name: "Playwright + axe",
+    role: "Verifier otomatis",
+    example: "0 pelanggaran WCAG AA di light+dark, overflow 0px di 320-1920.",
+  },
+];
+
+export const workflowSteps: WorkflowStep[] = [
+  {
+    id: "paham",
+    title: "Pahami",
+    body: "Brief, repo, dan data dibaca dulu sebelum satu baris kode ditulis.",
+    artifact: "Spec tertulis sebelum implementasi",
+  },
+  {
+    id: "bangun",
+    title: "Bangun dengan agen",
+    body: "Claude Code + MCP mengeksekusi per tugas kecil dengan review tiap langkah.",
+    artifact: "Commit per tugas",
+  },
+  {
+    id: "verifikasi",
+    title: "Verifikasi otomatis",
+    body: "Playwright screenshot dan audit axe tiap perubahan.",
+    artifact: "0 pelanggaran, 0 overflow",
+  },
+  {
+    id: "rilis",
+    title: "Rilis",
+    body: "Push ke main, Vercel deploy otomatis ke domain sendiri.",
+    artifact: "fadhliportfolio.my.id",
+  },
 ];
 
 export const certifications = [

@@ -3,19 +3,23 @@
 import { useMemo } from "react";
 import { useLang, pick } from "@/components/Lang";
 import {
+  aiSkills,
   capabilities,
   certifications,
   experience,
   profile,
   projects,
   stats,
+  workflowSteps,
 } from "@/lib/content";
 import {
+  aiSkillsEn,
   capabilitiesEn,
   experienceEn,
   profileEn,
   projectsEn,
   statsEn,
+  workflowStepsEn,
 } from "@/lib/content-en";
 
 const ui = {
@@ -29,7 +33,17 @@ const ui = {
     work: { id: "Proyek", en: "Work" },
     experience: { id: "Pengalaman", en: "Experience" },
     capabilities: { id: "Keahlian", en: "Skills" },
+    aiSkills: { id: "Skill AI", en: "AI Skills" },
+    workflow: { id: "Cara Kerja", en: "Workflow" },
     contact: { id: "Kontak", en: "Contact" },
+  },
+  palette: {
+    search: { id: "Cari aksi...", en: "Search actions..." },
+    noResult: { id: "Tidak ada hasil", en: "No results" },
+    hint: {
+      id: "Panah untuk navigasi, Enter untuk jalankan",
+      en: "Arrows to navigate, Enter to run",
+    },
   },
   available: { id: "Terbuka untuk proyek", en: "Open for projects" },
   open: { id: "Terbuka", en: "Open" },
@@ -57,11 +71,18 @@ export function useUi() {
         { href: "#kerja", label: t(ui.nav.work), index: "01" },
         { href: "#pengalaman", label: t(ui.nav.experience), index: "02" },
         { href: "#keahlian", label: t(ui.nav.capabilities), index: "03" },
-        { href: "#kontak", label: t(ui.nav.contact), index: "04" },
+        { href: "#skill-ai", label: t(ui.nav.aiSkills), index: "04" },
+        { href: "#cara-kerja", label: t(ui.nav.workflow), index: "05" },
+        { href: "#kontak", label: t(ui.nav.contact), index: "06" },
       ],
       available: t(ui.available),
       openBadge: t(ui.open),
       sendEmail: t(ui.sendEmail),
+      palette: {
+        search: t(ui.palette.search),
+        noResult: t(ui.palette.noResult),
+        hint: t(ui.palette.hint),
+      },
     };
   }, [lang]);
 }
@@ -76,6 +97,8 @@ export function useContent() {
       experience: pick(lang, experience, experienceEn),
       capabilities: pick(lang, capabilities, capabilitiesEn),
       stats: pick(lang, stats, statsEn),
+      aiSkills: pick(lang, aiSkills, aiSkillsEn),
+      workflowSteps: pick(lang, workflowSteps, workflowStepsEn),
       certifications,
     }),
     [lang],

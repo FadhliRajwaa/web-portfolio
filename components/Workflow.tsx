@@ -97,15 +97,24 @@ export default function Workflow() {
       </div>
 
       <div className="workflow-track relative mt-10">
-        {/* Rail: horizontal di desktop, vertikal di mobile. */}
+        {/* Rail: vertikal di mobile (kiri), horizontal di desktop (bawah kartu,
+            tepat di pusat lingkaran nomor). */}
         <div
           aria-hidden="true"
-          className="absolute top-0 bottom-0 left-[27px] w-px bg-rule lg:top-auto lg:right-0 lg:bottom-[27px] lg:left-0 lg:h-px lg:w-auto"
+          className="absolute top-0 bottom-0 left-[27px] w-px bg-rule lg:hidden"
         >
-          <div className="workflow-rail-fill h-full w-full origin-top bg-signal lg:origin-left" />
+          <div className="workflow-rail-fill h-full w-full origin-top bg-signal" />
         </div>
 
-        <ol className="grid gap-4 pl-14 lg:grid-cols-4 lg:gap-5 lg:pl-0 lg:pt-14">
+        <ol className="relative grid gap-4 pl-14 lg:grid-cols-4 lg:gap-5 lg:pl-0 lg:pt-0 lg:pb-14">
+          {/* Rail desktop: pusat lingkaran = 28px di bawah kartu
+              (-bottom-14 + setengah size-14). */}
+          <div
+            aria-hidden="true"
+            className="absolute right-0 bottom-[28px] left-0 hidden h-px bg-rule lg:block"
+          >
+            <div className="workflow-rail-fill h-full w-full origin-left bg-signal" />
+          </div>
           {workflowSteps.map((step, i) => (
             <li
               key={step.id}
